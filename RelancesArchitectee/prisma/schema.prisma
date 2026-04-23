@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum ReminderStatus {
+  PENDING
+  DONE
+  RESPONDED
+  ABANDONED
+}
+
+model Reminder {
+  id                 String         @id @default(cuid())
+  projectName        String
+  artisanName        String
+  artisanContact     String
+  followUpDelayDays  Int
+  dueAt              DateTime
+  note               String?
+  status             ReminderStatus @default(PENDING)
+  notificationSentAt DateTime?
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+}
+
+model MailTemplate {
+  id        String   @id @default(cuid())
+  title     String
+  body      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AppSettings {
+  id             String   @id @default("default")
+  architectEmail String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}

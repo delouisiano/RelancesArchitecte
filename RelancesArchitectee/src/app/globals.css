@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f3efe8;
+  --foreground: #171411;
+  --muted: #8a8074;
+  --soft: #5d554d;
+  --field: #fbfaf8;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+textarea {
+  resize: vertical;
+}
+
+::selection {
+  background: rgba(23, 20, 17, 0.14);
+}
+
+.action-menu {
+  position: relative;
+  display: inline-block;
+}
+
+.action-trigger {
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: var(--field);
+  cursor: pointer;
+  color: var(--foreground);
+}
+
+.action-trigger::-webkit-details-marker {
+  display: none;
+}
+
+.action-trigger span {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.action-popover {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.5rem);
+  min-width: 9rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 1rem;
+  background: white;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+  padding: 0.4rem;
+  z-index: 20;
+}
+
+.action-link {
+  display: block;
+  padding: 0.7rem 0.9rem;
+  border-radius: 0.75rem;
+  color: var(--foreground);
+  text-decoration: none;
+}
+
+.action-link:hover {
+  background: var(--field);
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(23, 20, 17, 0.45);
+  z-index: 50;
+}
+
+.modal-overlay:target {
+  display: flex;
+}
+
+.modal-card {
+  width: min(100%, 42rem);
+  max-height: calc(100vh - 3rem);
+  overflow: auto;
+  border-radius: 1.75rem;
+  background: white;
+  padding: 1.5rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.modal-card-wide {
+  width: min(100%, 56rem);
+}
+
+.modal-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 999px;
+  background: var(--field);
+  color: var(--foreground);
+  text-decoration: none;
+  font-size: 1.5rem;
+}
+
+pre {
+  margin: 0;
+  font-family: inherit;
+}
