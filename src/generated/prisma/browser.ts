@@ -23,6 +23,11 @@ export * from './enums';
  */
 export type Reminder = Prisma.ReminderModel
 /**
+ * Model MailTemplate
+ * 
+ */
+export type MailTemplate = Prisma.MailTemplateModel
+/**
  * Model AppSettings
  * 
  */

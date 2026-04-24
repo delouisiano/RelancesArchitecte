@@ -9,5 +9,6 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/Reminder'
+export type * from './models/MailTemplate'
 export type * from './models/AppSettings'
 export type * from './commonInputTypes'

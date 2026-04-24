@@ -385,6 +385,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   Reminder: 'Reminder',
+  MailTemplate: 'MailTemplate',
   AppSettings: 'AppSettings'
 } as const
 
@@ -401,7 +402,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "reminder" | "appSettings"
+    modelProps: "reminder" | "mailTemplate" | "appSettings"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -476,6 +477,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.ReminderCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.ReminderCountAggregateOutputType> | number
+        }
+      }
+    }
+    MailTemplate: {
+      payload: Prisma.$MailTemplatePayload<ExtArgs>
+      fields: Prisma.MailTemplateFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MailTemplateFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MailTemplatePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MailTemplateFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MailTemplatePayload>
+        }
+        findFirst: {
+          args: Prisma.MailTemplateFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MailTemplatePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MailTemplateFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MailTemplatePayload>
+        }
+        findMany: {
+          args: Prisma.MailTemplateFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MailTemplatePayload>[]
+        }
+        create: {
+          args: Prisma.MailTemplateCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MailTemplatePayload>
+        }
+        createMany: {
+          args: Prisma.MailTemplateCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MailTemplateCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MailTemplatePayload>[]
+        }
+        delete: {
+          args: Prisma.MailTemplateDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MailTemplatePayload>
+        }
+        update: {
+          args: Prisma.MailTemplateUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MailTemplatePayload>
+        }
+        deleteMany: {
+          args: Prisma.MailTemplateDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MailTemplateUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MailTemplateUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MailTemplatePayload>[]
+        }
+        upsert: {
+          args: Prisma.MailTemplateUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MailTemplatePayload>
+        }
+        aggregate: {
+          args: Prisma.MailTemplateAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMailTemplate>
+        }
+        groupBy: {
+          args: Prisma.MailTemplateGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MailTemplateGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MailTemplateCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MailTemplateCountAggregateOutputType> | number
         }
       }
     }
@@ -604,6 +679,17 @@ export const ReminderScalarFieldEnum = {
 } as const
 
 export type ReminderScalarFieldEnum = (typeof ReminderScalarFieldEnum)[keyof typeof ReminderScalarFieldEnum]
+
+
+export const MailTemplateScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  body: 'body',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MailTemplateScalarFieldEnum = (typeof MailTemplateScalarFieldEnum)[keyof typeof MailTemplateScalarFieldEnum]
 
 
 export const AppSettingsScalarFieldEnum = {
@@ -768,6 +854,7 @@ export type PrismaClientOptions = ({
 }
 export type GlobalOmitConfig = {
   reminder?: Prisma.ReminderOmit
+  mailTemplate?: Prisma.MailTemplateOmit
   appSettings?: Prisma.AppSettingsOmit
 }
 
