@@ -363,6 +363,7 @@ export default async function Home() {
 
                                     <form action={updateReminder} className="grid gap-4 text-left">
                                       <input type="hidden" name="id" value={reminder.id} />
+                                      <input type="hidden" name="returnToChantier" value={chantier.name} />
 
                                       <div className="grid gap-2">
                                         <label htmlFor={`${editModalId}-chantier`} className="text-sm font-medium">
@@ -482,6 +483,7 @@ export default async function Home() {
 
                                     <form action={deleteReminder} className="mt-6 border-t border-black/8 pt-6 text-left">
                                       <input type="hidden" name="id" value={reminder.id} />
+                                      <input type="hidden" name="returnToChantier" value={chantier.name} />
                                       <button
                                         type="submit"
                                         className="inline-flex items-center justify-center rounded-full bg-[#8f2f2f] px-6 py-3 text-sm font-medium text-white transition hover:opacity-92"

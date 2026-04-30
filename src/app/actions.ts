@@ -6,6 +6,10 @@ import { addDays } from "@/lib/reminders";
 import { redirect } from "next/navigation";
 import { randomUUID } from "crypto";
 
+function chantierAnchor(value: string) {
+  return `chantier-${value.toLowerCase().replace(/[^a-z0-9]+/gi, "-")}`;
+}
+
 export async function updateReminder(formData: FormData) {
   const id = String(formData.get("id") || "");
   const projectName = String(formData.get("projectName") || "").trim();
@@ -15,6 +19,7 @@ export async function updateReminder(formData: FormData) {
   const templateId = String(formData.get("templateId") || "").trim();
   const followUpDelayDays = Number(formData.get("followUpDelayDays"));
   const status = String(formData.get("status") || "") as ReminderStatus;
+  const returnToChantier = String(formData.get("returnToChantier") || chantierName).trim();
 
   if (!id || !projectName || !chantierName || !artisanContact || !Number.isFinite(followUpDelayDays) || !Object.values(ReminderStatus).includes(status)) {
     redirect("/?error=invalid-update");
@@ -35,11 +40,12 @@ export async function updateReminder(formData: FormData) {
     },
   });
 
-  redirect("/");
+  redirect(`/#${chantierAnchor(returnToChantier || chantierName)}`);
 }
 
 export async function deleteReminder(formData: FormData) {
   const id = String(formData.get("id") || "");
+  const returnToChantier = String(formData.get("returnToChantier") || "").trim();
 
   if (!id) {
     redirect("/?error=invalid-delete");
@@ -49,7 +55,7 @@ export async function deleteReminder(formData: FormData) {
     where: { id },
   });
 
-  redirect("/");
+  redirect(returnToChantier ? `/#${chantierAnchor(returnToChantier)}` : "/");
 }
 
 export async function createMailTemplate(formData: FormData) {
