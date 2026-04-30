@@ -323,7 +323,7 @@ export default async function Home() {
 
                         <div className="grid gap-4">
                           {chantier.reminders.map((reminder) => {
-                            const editModalId = `edit-${reminder.id}`;
+                            const reminderModalId = `reminder-${reminder.id}`;
                             const selectedTemplate = templates.find((template) => template.id === reminder.templateId);
                             const tone = getStatusTone(reminder.status);
 
@@ -347,12 +347,12 @@ export default async function Home() {
                                     </div>
                                   </div>
 
-                                  <a href={`#${editModalId}`} className="inline-flex items-center justify-center rounded-full border border-black/10 bg-white px-5 py-3 text-sm font-medium text-[var(--foreground)] transition hover:border-black/20">
+                                  <a href={`#${reminderModalId}`} className="inline-flex items-center justify-center rounded-full border border-black/10 bg-white px-5 py-3 text-sm font-medium text-[var(--foreground)] transition hover:border-black/20">
                                     Modifier
                                   </a>
                                 </div>
 
-                                <div id={editModalId} className="modal-overlay">
+                                <div id={reminderModalId} className="modal-overlay">
                                   <div className="modal-card">
                                     <div className="mb-6 flex items-start justify-between gap-4">
                                       <div className="text-left">
@@ -366,11 +366,11 @@ export default async function Home() {
                                       <input type="hidden" name="returnToChantier" value={chantier.name} />
 
                                       <div className="grid gap-2">
-                                        <label htmlFor={`${editModalId}-chantier`} className="text-sm font-medium">
+                                        <label htmlFor={`${reminderModalId}-chantier`} className="text-sm font-medium">
                                           Chantier
                                         </label>
                                         <input
-                                          id={`${editModalId}-chantier`}
+                                          id={`${reminderModalId}-chantier`}
                                           name="chantierName"
                                           defaultValue={reminder.chantierName}
                                           required
@@ -379,11 +379,11 @@ export default async function Home() {
                                       </div>
 
                                       <div className="grid gap-2">
-                                        <label htmlFor={`${editModalId}-project`} className="text-sm font-medium">
+                                        <label htmlFor={`${reminderModalId}-project`} className="text-sm font-medium">
                                           Nom de la relance
                                         </label>
                                         <input
-                                          id={`${editModalId}-project`}
+                                          id={`${reminderModalId}-project`}
                                           name="projectName"
                                           defaultValue={reminder.projectName}
                                           required
@@ -392,11 +392,11 @@ export default async function Home() {
                                       </div>
 
                                       <div className="grid gap-2">
-                                        <label htmlFor={`${editModalId}-contact`} className="text-sm font-medium">
+                                        <label htmlFor={`${reminderModalId}-contact`} className="text-sm font-medium">
                                           Contact de l’artisan
                                         </label>
                                         <input
-                                          id={`${editModalId}-contact`}
+                                          id={`${reminderModalId}-contact`}
                                           name="artisanContact"
                                           defaultValue={reminder.artisanContact}
                                           required
@@ -406,11 +406,11 @@ export default async function Home() {
 
                                       <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)_minmax(0,1fr)] md:items-start">
                                         <div className="grid gap-2">
-                                          <label htmlFor={`${editModalId}-delay`} className="text-sm font-medium">
+                                          <label htmlFor={`${reminderModalId}-delay`} className="text-sm font-medium">
                                             Délai de relance
                                           </label>
                                           <select
-                                            id={`${editModalId}-delay`}
+                                            id={`${reminderModalId}-delay`}
                                             name="followUpDelayDays"
                                             defaultValue={String(reminder.followUpDelayDays)}
                                             className="rounded-2xl border border-black/10 bg-[var(--field)] px-4 py-3 text-sm outline-none transition focus:border-black/30"
@@ -424,11 +424,11 @@ export default async function Home() {
                                         </div>
 
                                         <div className="grid gap-2">
-                                          <label htmlFor={`${editModalId}-template`} className="text-sm font-medium">
+                                          <label htmlFor={`${reminderModalId}-template`} className="text-sm font-medium">
                                             Template de relance
                                           </label>
                                           <select
-                                            id={`${editModalId}-template`}
+                                            id={`${reminderModalId}-template`}
                                             name="templateId"
                                             defaultValue={reminder.templateId || ""}
                                             className="w-full rounded-2xl border border-black/10 bg-[var(--field)] px-4 py-3 text-sm outline-none transition focus:border-black/30"
@@ -443,11 +443,11 @@ export default async function Home() {
                                         </div>
 
                                         <div className="grid gap-2">
-                                          <label htmlFor={`${editModalId}-status`} className="text-sm font-medium">
+                                          <label htmlFor={`${reminderModalId}-status`} className="text-sm font-medium">
                                             Statut
                                           </label>
                                           <select
-                                            id={`${editModalId}-status`}
+                                            id={`${reminderModalId}-status`}
                                             name="status"
                                             defaultValue={reminder.status}
                                             className="w-full rounded-2xl border border-black/10 bg-[var(--field)] px-4 py-3 text-sm outline-none transition focus:border-black/30"
@@ -462,11 +462,11 @@ export default async function Home() {
                                       </div>
 
                                       <div className="grid gap-2">
-                                        <label htmlFor={`${editModalId}-note`} className="text-sm font-medium">
+                                        <label htmlFor={`${reminderModalId}-note`} className="text-sm font-medium">
                                           Note
                                         </label>
                                         <textarea
-                                          id={`${editModalId}-note`}
+                                          id={`${reminderModalId}-note`}
                                           name="note"
                                           rows={5}
                                           defaultValue={reminder.note || ""}

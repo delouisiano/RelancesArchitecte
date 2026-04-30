@@ -10,6 +10,10 @@ function chantierAnchor(value: string) {
   return `chantier-${value.toLowerCase().replace(/[^a-z0-9]+/gi, "-")}`;
 }
 
+function reminderAnchor(value: string) {
+  return `reminder-${value}`;
+}
+
 export async function updateReminder(formData: FormData) {
   const id = String(formData.get("id") || "");
   const projectName = String(formData.get("projectName") || "").trim();
@@ -40,7 +44,7 @@ export async function updateReminder(formData: FormData) {
     },
   });
 
-  redirect(`/#${chantierAnchor(returnToChantier || chantierName)}`);
+  redirect(`/#${reminderAnchor(id)}`);
 }
 
 export async function deleteReminder(formData: FormData) {
