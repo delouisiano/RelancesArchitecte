@@ -667,11 +667,13 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const ReminderScalarFieldEnum = {
   id: 'id',
   projectName: 'projectName',
+  chantierName: 'chantierName',
   artisanName: 'artisanName',
   artisanContact: 'artisanContact',
   followUpDelayDays: 'followUpDelayDays',
   dueAt: 'dueAt',
   note: 'note',
+  templateId: 'templateId',
   status: 'status',
   notificationSentAt: 'notificationSentAt',
   createdAt: 'createdAt',

@@ -37,11 +37,13 @@ export type ReminderSumAggregateOutputType = {
 export type ReminderMinAggregateOutputType = {
   id: string | null
   projectName: string | null
+  chantierName: string | null
   artisanName: string | null
   artisanContact: string | null
   followUpDelayDays: number | null
   dueAt: Date | null
   note: string | null
+  templateId: string | null
   status: $Enums.ReminderStatus | null
   notificationSentAt: Date | null
   createdAt: Date | null
@@ -51,11 +53,13 @@ export type ReminderMinAggregateOutputType = {
 export type ReminderMaxAggregateOutputType = {
   id: string | null
   projectName: string | null
+  chantierName: string | null
   artisanName: string | null
   artisanContact: string | null
   followUpDelayDays: number | null
   dueAt: Date | null
   note: string | null
+  templateId: string | null
   status: $Enums.ReminderStatus | null
   notificationSentAt: Date | null
   createdAt: Date | null
@@ -65,11 +69,13 @@ export type ReminderMaxAggregateOutputType = {
 export type ReminderCountAggregateOutputType = {
   id: number
   projectName: number
+  chantierName: number
   artisanName: number
   artisanContact: number
   followUpDelayDays: number
   dueAt: number
   note: number
+  templateId: number
   status: number
   notificationSentAt: number
   createdAt: number
@@ -89,11 +95,13 @@ export type ReminderSumAggregateInputType = {
 export type ReminderMinAggregateInputType = {
   id?: true
   projectName?: true
+  chantierName?: true
   artisanName?: true
   artisanContact?: true
   followUpDelayDays?: true
   dueAt?: true
   note?: true
+  templateId?: true
   status?: true
   notificationSentAt?: true
   createdAt?: true
@@ -103,11 +111,13 @@ export type ReminderMinAggregateInputType = {
 export type ReminderMaxAggregateInputType = {
   id?: true
   projectName?: true
+  chantierName?: true
   artisanName?: true
   artisanContact?: true
   followUpDelayDays?: true
   dueAt?: true
   note?: true
+  templateId?: true
   status?: true
   notificationSentAt?: true
   createdAt?: true
@@ -117,11 +127,13 @@ export type ReminderMaxAggregateInputType = {
 export type ReminderCountAggregateInputType = {
   id?: true
   projectName?: true
+  chantierName?: true
   artisanName?: true
   artisanContact?: true
   followUpDelayDays?: true
   dueAt?: true
   note?: true
+  templateId?: true
   status?: true
   notificationSentAt?: true
   createdAt?: true
@@ -218,11 +230,13 @@ export type ReminderGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 export type ReminderGroupByOutputType = {
   id: string
   projectName: string
+  chantierName: string
   artisanName: string
   artisanContact: string
   followUpDelayDays: number
   dueAt: Date
   note: string | null
+  templateId: string | null
   status: $Enums.ReminderStatus
   notificationSentAt: Date | null
   createdAt: Date
@@ -255,11 +269,13 @@ export type ReminderWhereInput = {
   NOT?: Prisma.ReminderWhereInput | Prisma.ReminderWhereInput[]
   id?: Prisma.StringFilter<"Reminder"> | string
   projectName?: Prisma.StringFilter<"Reminder"> | string
+  chantierName?: Prisma.StringFilter<"Reminder"> | string
   artisanName?: Prisma.StringFilter<"Reminder"> | string
   artisanContact?: Prisma.StringFilter<"Reminder"> | string
   followUpDelayDays?: Prisma.IntFilter<"Reminder"> | number
   dueAt?: Prisma.DateTimeFilter<"Reminder"> | Date | string
   note?: Prisma.StringNullableFilter<"Reminder"> | string | null
+  templateId?: Prisma.StringNullableFilter<"Reminder"> | string | null
   status?: Prisma.EnumReminderStatusFilter<"Reminder"> | $Enums.ReminderStatus
   notificationSentAt?: Prisma.DateTimeNullableFilter<"Reminder"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Reminder"> | Date | string
@@ -269,11 +285,13 @@ export type ReminderWhereInput = {
 export type ReminderOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   projectName?: Prisma.SortOrder
+  chantierName?: Prisma.SortOrder
   artisanName?: Prisma.SortOrder
   artisanContact?: Prisma.SortOrder
   followUpDelayDays?: Prisma.SortOrder
   dueAt?: Prisma.SortOrder
   note?: Prisma.SortOrderInput | Prisma.SortOrder
+  templateId?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   notificationSentAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -286,11 +304,13 @@ export type ReminderWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.ReminderWhereInput[]
   NOT?: Prisma.ReminderWhereInput | Prisma.ReminderWhereInput[]
   projectName?: Prisma.StringFilter<"Reminder"> | string
+  chantierName?: Prisma.StringFilter<"Reminder"> | string
   artisanName?: Prisma.StringFilter<"Reminder"> | string
   artisanContact?: Prisma.StringFilter<"Reminder"> | string
   followUpDelayDays?: Prisma.IntFilter<"Reminder"> | number
   dueAt?: Prisma.DateTimeFilter<"Reminder"> | Date | string
   note?: Prisma.StringNullableFilter<"Reminder"> | string | null
+  templateId?: Prisma.StringNullableFilter<"Reminder"> | string | null
   status?: Prisma.EnumReminderStatusFilter<"Reminder"> | $Enums.ReminderStatus
   notificationSentAt?: Prisma.DateTimeNullableFilter<"Reminder"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Reminder"> | Date | string
@@ -300,11 +320,13 @@ export type ReminderWhereUniqueInput = Prisma.AtLeast<{
 export type ReminderOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   projectName?: Prisma.SortOrder
+  chantierName?: Prisma.SortOrder
   artisanName?: Prisma.SortOrder
   artisanContact?: Prisma.SortOrder
   followUpDelayDays?: Prisma.SortOrder
   dueAt?: Prisma.SortOrder
   note?: Prisma.SortOrderInput | Prisma.SortOrder
+  templateId?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   notificationSentAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -322,11 +344,13 @@ export type ReminderScalarWhereWithAggregatesInput = {
   NOT?: Prisma.ReminderScalarWhereWithAggregatesInput | Prisma.ReminderScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Reminder"> | string
   projectName?: Prisma.StringWithAggregatesFilter<"Reminder"> | string
+  chantierName?: Prisma.StringWithAggregatesFilter<"Reminder"> | string
   artisanName?: Prisma.StringWithAggregatesFilter<"Reminder"> | string
   artisanContact?: Prisma.StringWithAggregatesFilter<"Reminder"> | string
   followUpDelayDays?: Prisma.IntWithAggregatesFilter<"Reminder"> | number
   dueAt?: Prisma.DateTimeWithAggregatesFilter<"Reminder"> | Date | string
   note?: Prisma.StringNullableWithAggregatesFilter<"Reminder"> | string | null
+  templateId?: Prisma.StringNullableWithAggregatesFilter<"Reminder"> | string | null
   status?: Prisma.EnumReminderStatusWithAggregatesFilter<"Reminder"> | $Enums.ReminderStatus
   notificationSentAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Reminder"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Reminder"> | Date | string
@@ -336,11 +360,13 @@ export type ReminderScalarWhereWithAggregatesInput = {
 export type ReminderCreateInput = {
   id?: string
   projectName: string
+  chantierName: string
   artisanName: string
   artisanContact: string
   followUpDelayDays: number
   dueAt: Date | string
   note?: string | null
+  templateId?: string | null
   status?: $Enums.ReminderStatus
   notificationSentAt?: Date | string | null
   createdAt?: Date | string
@@ -350,11 +376,13 @@ export type ReminderCreateInput = {
 export type ReminderUncheckedCreateInput = {
   id?: string
   projectName: string
+  chantierName: string
   artisanName: string
   artisanContact: string
   followUpDelayDays: number
   dueAt: Date | string
   note?: string | null
+  templateId?: string | null
   status?: $Enums.ReminderStatus
   notificationSentAt?: Date | string | null
   createdAt?: Date | string
@@ -364,11 +392,13 @@ export type ReminderUncheckedCreateInput = {
 export type ReminderUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   projectName?: Prisma.StringFieldUpdateOperationsInput | string
+  chantierName?: Prisma.StringFieldUpdateOperationsInput | string
   artisanName?: Prisma.StringFieldUpdateOperationsInput | string
   artisanContact?: Prisma.StringFieldUpdateOperationsInput | string
   followUpDelayDays?: Prisma.IntFieldUpdateOperationsInput | number
   dueAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  templateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumReminderStatusFieldUpdateOperationsInput | $Enums.ReminderStatus
   notificationSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -378,11 +408,13 @@ export type ReminderUpdateInput = {
 export type ReminderUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   projectName?: Prisma.StringFieldUpdateOperationsInput | string
+  chantierName?: Prisma.StringFieldUpdateOperationsInput | string
   artisanName?: Prisma.StringFieldUpdateOperationsInput | string
   artisanContact?: Prisma.StringFieldUpdateOperationsInput | string
   followUpDelayDays?: Prisma.IntFieldUpdateOperationsInput | number
   dueAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  templateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumReminderStatusFieldUpdateOperationsInput | $Enums.ReminderStatus
   notificationSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -392,11 +424,13 @@ export type ReminderUncheckedUpdateInput = {
 export type ReminderCreateManyInput = {
   id?: string
   projectName: string
+  chantierName: string
   artisanName: string
   artisanContact: string
   followUpDelayDays: number
   dueAt: Date | string
   note?: string | null
+  templateId?: string | null
   status?: $Enums.ReminderStatus
   notificationSentAt?: Date | string | null
   createdAt?: Date | string
@@ -406,11 +440,13 @@ export type ReminderCreateManyInput = {
 export type ReminderUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   projectName?: Prisma.StringFieldUpdateOperationsInput | string
+  chantierName?: Prisma.StringFieldUpdateOperationsInput | string
   artisanName?: Prisma.StringFieldUpdateOperationsInput | string
   artisanContact?: Prisma.StringFieldUpdateOperationsInput | string
   followUpDelayDays?: Prisma.IntFieldUpdateOperationsInput | number
   dueAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  templateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumReminderStatusFieldUpdateOperationsInput | $Enums.ReminderStatus
   notificationSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -420,11 +456,13 @@ export type ReminderUpdateManyMutationInput = {
 export type ReminderUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   projectName?: Prisma.StringFieldUpdateOperationsInput | string
+  chantierName?: Prisma.StringFieldUpdateOperationsInput | string
   artisanName?: Prisma.StringFieldUpdateOperationsInput | string
   artisanContact?: Prisma.StringFieldUpdateOperationsInput | string
   followUpDelayDays?: Prisma.IntFieldUpdateOperationsInput | number
   dueAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  templateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumReminderStatusFieldUpdateOperationsInput | $Enums.ReminderStatus
   notificationSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -434,11 +472,13 @@ export type ReminderUncheckedUpdateManyInput = {
 export type ReminderCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   projectName?: Prisma.SortOrder
+  chantierName?: Prisma.SortOrder
   artisanName?: Prisma.SortOrder
   artisanContact?: Prisma.SortOrder
   followUpDelayDays?: Prisma.SortOrder
   dueAt?: Prisma.SortOrder
   note?: Prisma.SortOrder
+  templateId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   notificationSentAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -452,11 +492,13 @@ export type ReminderAvgOrderByAggregateInput = {
 export type ReminderMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   projectName?: Prisma.SortOrder
+  chantierName?: Prisma.SortOrder
   artisanName?: Prisma.SortOrder
   artisanContact?: Prisma.SortOrder
   followUpDelayDays?: Prisma.SortOrder
   dueAt?: Prisma.SortOrder
   note?: Prisma.SortOrder
+  templateId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   notificationSentAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -466,11 +508,13 @@ export type ReminderMaxOrderByAggregateInput = {
 export type ReminderMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   projectName?: Prisma.SortOrder
+  chantierName?: Prisma.SortOrder
   artisanName?: Prisma.SortOrder
   artisanContact?: Prisma.SortOrder
   followUpDelayDays?: Prisma.SortOrder
   dueAt?: Prisma.SortOrder
   note?: Prisma.SortOrder
+  templateId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   notificationSentAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -514,11 +558,13 @@ export type NullableDateTimeFieldUpdateOperationsInput = {
 export type ReminderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   projectName?: boolean
+  chantierName?: boolean
   artisanName?: boolean
   artisanContact?: boolean
   followUpDelayDays?: boolean
   dueAt?: boolean
   note?: boolean
+  templateId?: boolean
   status?: boolean
   notificationSentAt?: boolean
   createdAt?: boolean
@@ -528,11 +574,13 @@ export type ReminderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
 export type ReminderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   projectName?: boolean
+  chantierName?: boolean
   artisanName?: boolean
   artisanContact?: boolean
   followUpDelayDays?: boolean
   dueAt?: boolean
   note?: boolean
+  templateId?: boolean
   status?: boolean
   notificationSentAt?: boolean
   createdAt?: boolean
@@ -542,11 +590,13 @@ export type ReminderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type ReminderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   projectName?: boolean
+  chantierName?: boolean
   artisanName?: boolean
   artisanContact?: boolean
   followUpDelayDays?: boolean
   dueAt?: boolean
   note?: boolean
+  templateId?: boolean
   status?: boolean
   notificationSentAt?: boolean
   createdAt?: boolean
@@ -556,18 +606,20 @@ export type ReminderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type ReminderSelectScalar = {
   id?: boolean
   projectName?: boolean
+  chantierName?: boolean
   artisanName?: boolean
   artisanContact?: boolean
   followUpDelayDays?: boolean
   dueAt?: boolean
   note?: boolean
+  templateId?: boolean
   status?: boolean
   notificationSentAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ReminderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "projectName" | "artisanName" | "artisanContact" | "followUpDelayDays" | "dueAt" | "note" | "status" | "notificationSentAt" | "createdAt" | "updatedAt", ExtArgs["result"]["reminder"]>
+export type ReminderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "projectName" | "chantierName" | "artisanName" | "artisanContact" | "followUpDelayDays" | "dueAt" | "note" | "templateId" | "status" | "notificationSentAt" | "createdAt" | "updatedAt", ExtArgs["result"]["reminder"]>
 
 export type $ReminderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Reminder"
@@ -575,11 +627,13 @@ export type $ReminderPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     projectName: string
+    chantierName: string
     artisanName: string
     artisanContact: string
     followUpDelayDays: number
     dueAt: Date
     note: string | null
+    templateId: string | null
     status: $Enums.ReminderStatus
     notificationSentAt: Date | null
     createdAt: Date
@@ -1009,11 +1063,13 @@ export interface Prisma__ReminderClient<T, Null = never, ExtArgs extends runtime
 export interface ReminderFieldRefs {
   readonly id: Prisma.FieldRef<"Reminder", 'String'>
   readonly projectName: Prisma.FieldRef<"Reminder", 'String'>
+  readonly chantierName: Prisma.FieldRef<"Reminder", 'String'>
   readonly artisanName: Prisma.FieldRef<"Reminder", 'String'>
   readonly artisanContact: Prisma.FieldRef<"Reminder", 'String'>
   readonly followUpDelayDays: Prisma.FieldRef<"Reminder", 'Int'>
   readonly dueAt: Prisma.FieldRef<"Reminder", 'DateTime'>
   readonly note: Prisma.FieldRef<"Reminder", 'String'>
+  readonly templateId: Prisma.FieldRef<"Reminder", 'String'>
   readonly status: Prisma.FieldRef<"Reminder", 'ReminderStatus'>
   readonly notificationSentAt: Prisma.FieldRef<"Reminder", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Reminder", 'DateTime'>

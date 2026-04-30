@@ -10,11 +10,13 @@ export async function updateReminder(formData: FormData) {
   const id = String(formData.get("id") || "");
   const projectName = String(formData.get("projectName") || "").trim();
   const artisanContact = String(formData.get("artisanContact") || "").trim();
+  const chantierName = String(formData.get("chantierName") || "").trim();
   const note = String(formData.get("note") || "").trim();
+  const templateId = String(formData.get("templateId") || "").trim();
   const followUpDelayDays = Number(formData.get("followUpDelayDays"));
   const status = String(formData.get("status") || "") as ReminderStatus;
 
-  if (!id || !projectName || !artisanContact || !Number.isFinite(followUpDelayDays) || !Object.values(ReminderStatus).includes(status)) {
+  if (!id || !projectName || !chantierName || !artisanContact || !Number.isFinite(followUpDelayDays) || !Object.values(ReminderStatus).includes(status)) {
     redirect("/?error=invalid-update");
   }
 
@@ -22,9 +24,11 @@ export async function updateReminder(formData: FormData) {
     where: { id },
     data: {
       projectName,
+      chantierName,
       artisanName: artisanContact,
       artisanContact,
       note: note || null,
+      templateId: templateId || null,
       followUpDelayDays,
       dueAt: addDays(new Date(), followUpDelayDays),
       status,

@@ -17,11 +17,13 @@ enum ReminderStatus {
 model Reminder {
   id                 String         @id @default(cuid())
   projectName        String
+  chantierName       String
   artisanName        String
   artisanContact     String
   followUpDelayDays  Int
   dueAt              DateTime
   note               String?
+  templateId         String?
   status             ReminderStatus @default(PENDING)
   notificationSentAt DateTime?
   createdAt          DateTime       @default(now())

@@ -31,3 +31,18 @@ export function getStatusLabel(status: ReminderStatus) {
 export function isOverdue(dueAt: Date, status: ReminderStatus) {
   return status === ReminderStatus.PENDING && dueAt.getTime() < Date.now();
 }
+
+
+export function getStatusTone(status: ReminderStatus) {
+  switch (status) {
+    case ReminderStatus.DONE:
+      return "success";
+    case ReminderStatus.RESPONDED:
+      return "info";
+    case ReminderStatus.ABANDONED:
+      return "muted";
+    case ReminderStatus.PENDING:
+    default:
+      return "pending";
+  }
+}
