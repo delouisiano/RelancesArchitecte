@@ -57,23 +57,26 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen bg-[var(--background)] px-6 py-10 text-[var(--foreground)] md:px-10 md:py-14">
+      <div className="page-switch-shell">
+        <nav className="page-switch" aria-label="Navigation principale">
+          <Link href="/" className="page-switch__link page-switch__link--active" aria-current="page">
+            Rappels
+          </Link>
+          <Link href="/templates" className="page-switch__link">
+            Templates
+          </Link>
+        </nav>
+      </div>
+
       <div className="mx-auto grid max-w-6xl gap-8">
-        <section className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <section className="grid gap-4 text-center">
           <div className="grid gap-4">
             <p className="text-sm font-medium uppercase tracking-[0.25em] text-[var(--muted)]">Suivi des relances</p>
-            <h1 className="max-w-4xl text-4xl font-semibold tracking-[-0.03em] md:text-5xl">
+            <h1 className="mx-auto max-w-4xl text-3xl font-semibold tracking-[-0.03em] md:text-4xl">
               Gestion des rappels artisans
             </h1>
           </div>
 
-          <nav className="page-switch" aria-label="Navigation principale">
-            <Link href="/" className="page-switch__link page-switch__link--active" aria-current="page">
-              Rappels
-            </Link>
-            <Link href="/templates" className="page-switch__link">
-              Templates
-            </Link>
-          </nav>
         </section>
 
         <section className="mx-auto w-full max-w-3xl rounded-[2rem] border border-black/8 bg-white p-6 shadow-sm md:p-8">

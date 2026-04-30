@@ -9,26 +9,29 @@ export default async function TemplatesPage() {
 
   return (
     <main className="min-h-screen bg-[var(--background)] px-6 py-10 text-[var(--foreground)] md:px-10 md:py-14">
+      <div className="page-switch-shell">
+        <nav className="page-switch" aria-label="Navigation principale">
+          <Link href="/" className="page-switch__link">
+            Rappels
+          </Link>
+          <Link href="/templates" className="page-switch__link page-switch__link--active" aria-current="page">
+            Templates
+          </Link>
+        </nav>
+      </div>
+
       <div className="mx-auto grid max-w-6xl gap-8">
-        <section className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <section className="grid gap-4 text-center">
           <div className="grid gap-4">
             <p className="text-sm font-medium uppercase tracking-[0.25em] text-[var(--muted)]">Templates email</p>
             <div className="grid gap-3">
-              <h1 className="max-w-4xl text-4xl font-semibold tracking-[-0.03em] md:text-5xl">
+              <h1 className="mx-auto max-w-4xl text-3xl font-semibold tracking-[-0.03em] md:text-4xl">
                 Bibliothèque de templates
               </h1>
             </div>
           </div>
 
-          <div className="flex flex-wrap items-start gap-5">
-            <nav className="page-switch" aria-label="Navigation principale">
-              <Link href="/" className="page-switch__link">
-                Rappels
-              </Link>
-              <Link href="/templates" className="page-switch__link page-switch__link--active" aria-current="page">
-                Templates
-              </Link>
-            </nav>
+          <div className="flex justify-center">
             <a href="#create-template" className="inline-flex items-center justify-center rounded-full bg-[var(--foreground)] px-6 py-3 text-sm font-medium text-white transition hover:opacity-92">
               Nouveau template
             </a>

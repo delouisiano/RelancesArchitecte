@@ -153,15 +153,26 @@ pre {
 }
 
 
+.page-switch-shell {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  justify-content: center;
+  padding: 0 0 1.5rem;
+  background: linear-gradient(to bottom, var(--background) 0%, var(--background) 82%, rgba(243, 239, 232, 0) 100%);
+}
+
 .page-switch {
   display: inline-flex;
   align-items: center;
-  gap: 1.5rem;
+  justify-content: center;
+  gap: 2rem;
 }
 
 .page-switch__link {
   color: var(--muted);
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 700;
   line-height: 1.2;
   text-decoration: underline;
