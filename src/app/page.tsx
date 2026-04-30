@@ -54,12 +54,14 @@ const statusOptions = [ReminderStatus.PENDING, ReminderStatus.DONE, ReminderStat
 
 export default async function Home() {
   const [reminders, templates] = await Promise.all([
-    prisma.reminder.findMany({ orderBy: [{ chantierName: "asc" }, { dueAt: "asc" }] }),
+    prisma.reminder.findMany({ orderBy: [{ dueAt: "asc" }] }),
     prisma.mailTemplate.findMany({ orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }] }),
   ]);
 
+  const sortedReminders = [...reminders].sort((a, b) => ((a.chantierName || "").localeCompare(b.chantierName || "", "fr", { sensitivity: "base" }) || a.dueAt.getTime() - b.dueAt.getTime()));
+
   const chantierSummaries = Array.from(
-    reminders.reduce((map, reminder) => {
+    sortedReminders.reduce((map, reminder) => {
       const chantierKey = (reminder.chantierName || "").trim() || "Sans chantier";
       const current = map.get(chantierKey) ?? {
         name: chantierKey,
