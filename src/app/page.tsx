@@ -351,154 +351,161 @@ export default async function Home() {
                                     Modifier
                                   </a>
                                 </div>
-
-                                <div id={reminderModalId} className="modal-overlay">
-                                  <div className="modal-card">
-                                    <div className="mb-6 flex items-start justify-between gap-4">
-                                      <div className="text-left">
-                                        <h3 className="text-xl font-semibold">Modifier la relance</h3>
-                                      </div>
-                                      <a href={`#${modalId}`} className="modal-close" aria-label="Fermer la fenêtre">×</a>
-                                    </div>
-
-                                    <form action={updateReminder} className="grid gap-4 text-left">
-                                      <input type="hidden" name="id" value={reminder.id} />
-                                      <input type="hidden" name="returnToChantier" value={chantier.name} />
-
-                                      <div className="grid gap-2">
-                                        <label htmlFor={`${reminderModalId}-chantier`} className="text-sm font-medium">
-                                          Chantier
-                                        </label>
-                                        <input
-                                          id={`${reminderModalId}-chantier`}
-                                          name="chantierName"
-                                          defaultValue={reminder.chantierName}
-                                          required
-                                          className="rounded-2xl border border-black/10 bg-[var(--field)] px-4 py-3 text-sm outline-none transition focus:border-black/30"
-                                        />
-                                      </div>
-
-                                      <div className="grid gap-2">
-                                        <label htmlFor={`${reminderModalId}-project`} className="text-sm font-medium">
-                                          Nom de la relance
-                                        </label>
-                                        <input
-                                          id={`${reminderModalId}-project`}
-                                          name="projectName"
-                                          defaultValue={reminder.projectName}
-                                          required
-                                          className="rounded-2xl border border-black/10 bg-[var(--field)] px-4 py-3 text-sm outline-none transition focus:border-black/30"
-                                        />
-                                      </div>
-
-                                      <div className="grid gap-2">
-                                        <label htmlFor={`${reminderModalId}-contact`} className="text-sm font-medium">
-                                          Contact de l’artisan
-                                        </label>
-                                        <input
-                                          id={`${reminderModalId}-contact`}
-                                          name="artisanContact"
-                                          defaultValue={reminder.artisanContact}
-                                          required
-                                          className="rounded-2xl border border-black/10 bg-[var(--field)] px-4 py-3 text-sm outline-none transition focus:border-black/30"
-                                        />
-                                      </div>
-
-                                      <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)_minmax(0,1fr)] md:items-start">
-                                        <div className="grid gap-2">
-                                          <label htmlFor={`${reminderModalId}-delay`} className="text-sm font-medium">
-                                            Délai de relance
-                                          </label>
-                                          <select
-                                            id={`${reminderModalId}-delay`}
-                                            name="followUpDelayDays"
-                                            defaultValue={String(reminder.followUpDelayDays)}
-                                            className="rounded-2xl border border-black/10 bg-[var(--field)] px-4 py-3 text-sm outline-none transition focus:border-black/30"
-                                          >
-                                            <option value="2">2 jours</option>
-                                            <option value="3">3 jours</option>
-                                            <option value="5">5 jours</option>
-                                            <option value="7">7 jours</option>
-                                            <option value="14">14 jours</option>
-                                          </select>
-                                        </div>
-
-                                        <div className="grid gap-2">
-                                          <label htmlFor={`${reminderModalId}-template`} className="text-sm font-medium">
-                                            Template de relance
-                                          </label>
-                                          <select
-                                            id={`${reminderModalId}-template`}
-                                            name="templateId"
-                                            defaultValue={reminder.templateId || ""}
-                                            className="w-full rounded-2xl border border-black/10 bg-[var(--field)] px-4 py-3 text-sm outline-none transition focus:border-black/30"
-                                          >
-                                            <option value="">Aucun template</option>
-                                            {templates.map((template) => (
-                                              <option key={template.id} value={template.id}>
-                                                {template.title}
-                                              </option>
-                                            ))}
-                                          </select>
-                                        </div>
-
-                                        <div className="grid gap-2">
-                                          <label htmlFor={`${reminderModalId}-status`} className="text-sm font-medium">
-                                            Statut
-                                          </label>
-                                          <select
-                                            id={`${reminderModalId}-status`}
-                                            name="status"
-                                            defaultValue={reminder.status}
-                                            className="w-full rounded-2xl border border-black/10 bg-[var(--field)] px-4 py-3 text-sm outline-none transition focus:border-black/30"
-                                          >
-                                            {statusOptions.map((status) => (
-                                              <option key={status} value={status}>
-                                                {getStatusLabel(status)}
-                                              </option>
-                                            ))}
-                                          </select>
-                                        </div>
-                                      </div>
-
-                                      <div className="grid gap-2">
-                                        <label htmlFor={`${reminderModalId}-note`} className="text-sm font-medium">
-                                          Note
-                                        </label>
-                                        <textarea
-                                          id={`${reminderModalId}-note`}
-                                          name="note"
-                                          rows={5}
-                                          defaultValue={reminder.note || ""}
-                                          className="rounded-2xl border border-black/10 bg-[var(--field)] px-4 py-3 text-sm outline-none transition focus:border-black/30"
-                                        />
-                                      </div>
-
-                                      <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:justify-between">
-                                        <button type="submit" className="inline-flex items-center justify-center rounded-full bg-[var(--foreground)] px-6 py-3 text-sm font-medium text-white transition hover:opacity-92">
-                                          Enregistrer les modifications
-                                        </button>
-                                      </div>
-                                    </form>
-
-                                    <form action={deleteReminder} className="mt-6 border-t border-black/8 pt-6 text-left">
-                                      <input type="hidden" name="id" value={reminder.id} />
-                                      <input type="hidden" name="returnToChantier" value={chantier.name} />
-                                      <button
-                                        type="submit"
-                                        className="inline-flex items-center justify-center rounded-full bg-[#8f2f2f] px-6 py-3 text-sm font-medium text-white transition hover:opacity-92"
-                                      >
-                                        Supprimer la ligne
-                                      </button>
-                                    </form>
-                                  </div>
-                                </div>
                               </article>
                             );
                           })}
                         </div>
                       </div>
                     </div>
+
+                    {chantier.reminders.map((reminder) => {
+                      const reminderModalId = `reminder-${reminder.id}`;
+                      const selectedTemplate = templates.find((template) => template.id === reminder.templateId);
+
+                      return (
+                        <div key={`${reminder.id}-editor`} id={reminderModalId} className="modal-overlay">
+                          <div className="modal-card">
+                            <div className="mb-6 flex items-start justify-between gap-4">
+                              <div className="text-left">
+                                <h3 className="text-xl font-semibold">Modifier la relance</h3>
+                              </div>
+                              <a href={`#${modalId}`} className="modal-close" aria-label="Fermer la fenêtre">×</a>
+                            </div>
+
+                            <form action={updateReminder} className="grid gap-4 text-left">
+                              <input type="hidden" name="id" value={reminder.id} />
+                              <input type="hidden" name="returnToChantier" value={chantier.name} />
+
+                              <div className="grid gap-2">
+                                <label htmlFor={`${reminderModalId}-chantier`} className="text-sm font-medium">
+                                  Chantier
+                                </label>
+                                <input
+                                  id={`${reminderModalId}-chantier`}
+                                  name="chantierName"
+                                  defaultValue={reminder.chantierName}
+                                  required
+                                  className="rounded-2xl border border-black/10 bg-[var(--field)] px-4 py-3 text-sm outline-none transition focus:border-black/30"
+                                />
+                              </div>
+
+                              <div className="grid gap-2">
+                                <label htmlFor={`${reminderModalId}-project`} className="text-sm font-medium">
+                                  Nom de la relance
+                                </label>
+                                <input
+                                  id={`${reminderModalId}-project`}
+                                  name="projectName"
+                                  defaultValue={reminder.projectName}
+                                  required
+                                  className="rounded-2xl border border-black/10 bg-[var(--field)] px-4 py-3 text-sm outline-none transition focus:border-black/30"
+                                />
+                              </div>
+
+                              <div className="grid gap-2">
+                                <label htmlFor={`${reminderModalId}-contact`} className="text-sm font-medium">
+                                  Contact de l’artisan
+                                </label>
+                                <input
+                                  id={`${reminderModalId}-contact`}
+                                  name="artisanContact"
+                                  defaultValue={reminder.artisanContact}
+                                  required
+                                  className="rounded-2xl border border-black/10 bg-[var(--field)] px-4 py-3 text-sm outline-none transition focus:border-black/30"
+                                />
+                              </div>
+
+                              <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)_minmax(0,1fr)] md:items-start">
+                                <div className="grid gap-2">
+                                  <label htmlFor={`${reminderModalId}-delay`} className="text-sm font-medium">
+                                    Délai de relance
+                                  </label>
+                                  <select
+                                    id={`${reminderModalId}-delay`}
+                                    name="followUpDelayDays"
+                                    defaultValue={String(reminder.followUpDelayDays)}
+                                    className="rounded-2xl border border-black/10 bg-[var(--field)] px-4 py-3 text-sm outline-none transition focus:border-black/30"
+                                  >
+                                    <option value="2">2 jours</option>
+                                    <option value="3">3 jours</option>
+                                    <option value="5">5 jours</option>
+                                    <option value="7">7 jours</option>
+                                    <option value="14">14 jours</option>
+                                  </select>
+                                </div>
+
+                                <div className="grid gap-2">
+                                  <label htmlFor={`${reminderModalId}-template`} className="text-sm font-medium">
+                                    Template de relance
+                                  </label>
+                                  <select
+                                    id={`${reminderModalId}-template`}
+                                    name="templateId"
+                                    defaultValue={reminder.templateId || ""}
+                                    className="w-full rounded-2xl border border-black/10 bg-[var(--field)] px-4 py-3 text-sm outline-none transition focus:border-black/30"
+                                  >
+                                    <option value="">Aucun template</option>
+                                    {templates.map((template) => (
+                                      <option key={template.id} value={template.id}>
+                                        {template.title}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+
+                                <div className="grid gap-2">
+                                  <label htmlFor={`${reminderModalId}-status`} className="text-sm font-medium">
+                                    Statut
+                                  </label>
+                                  <select
+                                    id={`${reminderModalId}-status`}
+                                    name="status"
+                                    defaultValue={reminder.status}
+                                    className="w-full rounded-2xl border border-black/10 bg-[var(--field)] px-4 py-3 text-sm outline-none transition focus:border-black/30"
+                                  >
+                                    {statusOptions.map((status) => (
+                                      <option key={status} value={status}>
+                                        {getStatusLabel(status)}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                              </div>
+
+                              <div className="grid gap-2">
+                                <label htmlFor={`${reminderModalId}-note`} className="text-sm font-medium">
+                                  Note
+                                </label>
+                                <textarea
+                                  id={`${reminderModalId}-note`}
+                                  name="note"
+                                  rows={5}
+                                  defaultValue={reminder.note || ""}
+                                  className="rounded-2xl border border-black/10 bg-[var(--field)] px-4 py-3 text-sm outline-none transition focus:border-black/30"
+                                />
+                              </div>
+
+                              <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:justify-between">
+                                <button type="submit" className="inline-flex items-center justify-center rounded-full bg-[var(--foreground)] px-6 py-3 text-sm font-medium text-white transition hover:opacity-92">
+                                  Enregistrer les modifications
+                                </button>
+                              </div>
+                            </form>
+
+                            <form action={deleteReminder} className="mt-6 border-t border-black/8 pt-6 text-left">
+                              <input type="hidden" name="id" value={reminder.id} />
+                              <input type="hidden" name="returnToChantier" value={chantier.name} />
+                              <button
+                                type="submit"
+                                className="inline-flex items-center justify-center rounded-full bg-[#8f2f2f] px-6 py-3 text-sm font-medium text-white transition hover:opacity-92"
+                              >
+                                Supprimer la ligne
+                              </button>
+                            </form>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 );
               })}
