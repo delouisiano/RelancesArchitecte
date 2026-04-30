@@ -63,8 +63,13 @@ textarea {
 }
 
 .action-trigger span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
   font-size: 1.3rem;
   line-height: 1;
+  transform: translateY(-1px);
 }
 
 .action-popover {
@@ -77,11 +82,15 @@ textarea {
   background: white;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
   padding: 0.4rem;
-  z-index: 20;
+  z-index: 60;
 }
 
 .action-link {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 2.5rem;
   padding: 0.7rem 0.9rem;
   border-radius: 0.75rem;
   color: var(--foreground);
@@ -117,6 +126,10 @@ textarea {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
 }
 
+.modal-card form {
+  overflow: visible;
+}
+
 .modal-card-wide {
   width: min(100%, 56rem);
 }
@@ -137,4 +150,30 @@ textarea {
 pre {
   margin: 0;
   font-family: inherit;
+}
+
+
+.page-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.page-switch__link {
+  color: var(--muted);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: underline;
+  text-decoration-thickness: 0.1em;
+  text-underline-offset: 0.18em;
+  transition: color 0.2s ease;
+}
+
+.page-switch__link:hover {
+  color: var(--foreground);
+}
+
+.page-switch__link--active {
+  color: var(--foreground);
 }

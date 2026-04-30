@@ -12,21 +12,23 @@ export default async function TemplatesPage() {
       <div className="mx-auto grid max-w-6xl gap-8">
         <section className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div className="grid gap-4">
-            <p className="text-sm font-medium uppercase tracking-[0.25em] text-[var(--muted)]">Templates mail</p>
+            <p className="text-sm font-medium uppercase tracking-[0.25em] text-[var(--muted)]">Templates email</p>
             <div className="grid gap-3">
               <h1 className="max-w-4xl text-4xl font-semibold tracking-[-0.03em] md:text-5xl">
-                Préparer des mails de relance réutilisables, histoire d’éviter de réécrire la même chose jusqu’à la fin des temps.
+                Bibliothèque de templates
               </h1>
-              <p className="max-w-3xl text-base leading-7 text-[var(--soft)]">
-                Cette page liste les modèles de mails, permet d’en créer un nouveau, d’en modifier un existant, ou de s’en servir comme base pour une variante.
-              </p>
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-3">
-            <Link href="/" className="inline-flex items-center justify-center rounded-full border border-black/10 bg-white px-5 py-3 text-sm font-medium text-[var(--foreground)] transition hover:border-black/20">
-              Retour aux rappels
-            </Link>
+          <div className="flex flex-wrap items-start gap-5">
+            <nav className="page-switch" aria-label="Navigation principale">
+              <Link href="/" className="page-switch__link">
+                Rappels
+              </Link>
+              <Link href="/templates" className="page-switch__link page-switch__link--active" aria-current="page">
+                Templates
+              </Link>
+            </nav>
             <a href="#create-template" className="inline-flex items-center justify-center rounded-full bg-[var(--foreground)] px-6 py-3 text-sm font-medium text-white transition hover:opacity-92">
               Nouveau template
             </a>
@@ -37,9 +39,6 @@ export default async function TemplatesPage() {
           <div className="mb-6 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
             <div>
               <h2 className="text-2xl font-semibold">Templates enregistrés</h2>
-              <p className="text-sm leading-6 text-[var(--soft)]">
-                Garde tes formulations utiles ici. Au moins un truc dans ce monde peut être réutilisé sans souffrance.
-              </p>
             </div>
             <div className="rounded-full bg-[var(--field)] px-4 py-2 text-sm text-[var(--soft)]">
               {templates.length} template{templates.length > 1 ? "s" : ""}
@@ -48,7 +47,7 @@ export default async function TemplatesPage() {
 
           {templates.length === 0 ? (
             <div className="rounded-[1.5rem] border border-dashed border-black/10 bg-[var(--field)] px-6 py-10 text-sm text-[var(--soft)]">
-              Aucun template pour le moment. Clique sur le bouton et corrige cette absence de civilisation.
+              Aucun template enregistré.
             </div>
           ) : (
             <div className="grid gap-4">
@@ -86,9 +85,6 @@ export default async function TemplatesPage() {
                         <div className="mb-6 flex items-start justify-between gap-4">
                           <div className="text-left">
                             <h3 className="text-xl font-semibold">Éditer le template</h3>
-                            <p className="mt-2 text-sm leading-6 text-[var(--soft)]">
-                              Tu modifies le titre et le corps du mail, puis tu enregistres. Rien de mystique, juste utile.
-                            </p>
                           </div>
                           <a href="#" className="modal-close" aria-label="Fermer la fenêtre">×</a>
                         </div>
@@ -121,9 +117,6 @@ export default async function TemplatesPage() {
                         <div className="mb-6 flex items-start justify-between gap-4">
                           <div className="text-left">
                             <h3 className="text-xl font-semibold">Créer une variante</h3>
-                            <p className="mt-2 text-sm leading-6 text-[var(--soft)]">
-                              On part de ce template comme référence, puis on l’ajuste pour en créer un nouveau fichier. Oui, enfin quelque chose qui évite le copier-coller débile.
-                            </p>
                           </div>
                           <a href="#" className="modal-close" aria-label="Fermer la fenêtre">×</a>
                         </div>
@@ -163,9 +156,6 @@ export default async function TemplatesPage() {
           <div className="mb-6 flex items-start justify-between gap-4">
             <div className="text-left">
               <h3 className="text-xl font-semibold">Nouveau template de mail</h3>
-              <p className="mt-2 text-sm leading-6 text-[var(--soft)]">
-                Donne-lui un titre, écris le corps du mail, et il apparaîtra dans la liste. Tu vois, même les logiciels peuvent parfois faire ce qu’on leur demande.
-              </p>
             </div>
             <a href="#" className="modal-close" aria-label="Fermer la fenêtre">×</a>
           </div>
