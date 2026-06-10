@@ -1,4 +1,11 @@
-export default function ContactsPage() {
+import { archiveContact, createContact } from "@/modules/contacts/actions";
+import { listActiveContacts } from "@/modules/contacts/queries";
+
+export const dynamic = "force-dynamic";
+
+export default async function ContactsPage() {
+  const contacts = await listActiveContacts();
+
   return (
     <section className="page">
       <div className="page-header">
@@ -6,10 +13,73 @@ export default function ContactsPage() {
           <p className="eyebrow">Contacts</p>
           <h2>Artisans et entreprises</h2>
           <p>
-            Les contacts artisans pourront etre reutilises dans plusieurs relances et
+            Les contacts artisans peuvent etre reutilises dans plusieurs relances et
             archives sans suppression destructive.
           </p>
         </div>
+      </div>
+
+      <div className="split">
+        <form action={createContact} className="panel form-panel">
+          <h3>Nouveau contact</h3>
+          <label>
+            Nom
+            <input name="name" required placeholder="Jean Martin" />
+          </label>
+          <label>
+            Entreprise
+            <input name="company" placeholder="Martin Couverture" />
+          </label>
+          <label>
+            Email
+            <input name="email" type="email" placeholder="contact@example.fr" />
+          </label>
+          <label>
+            Telephone
+            <input name="phone" placeholder="06 00 00 00 00" />
+          </label>
+          <label>
+            Notes
+            <textarea name="notes" placeholder="Specialite, disponibilites, contexte" rows={4} />
+          </label>
+          <button className="button primary" type="submit">
+            Creer le contact
+          </button>
+        </form>
+
+        <article className="panel">
+          <div className="section-title">
+            <h3>Contacts actifs</h3>
+            <span className="muted">{contacts.length} contact(s)</span>
+          </div>
+          {contacts.length === 0 ? (
+            <p className="muted">Aucun contact actif pour le moment.</p>
+          ) : (
+            <ul className="record-list">
+              {contacts.map((contact) => (
+                <li key={contact.id}>
+                  <div>
+                    <strong>{contact.name}</strong>
+                    {contact.company ? <p>{contact.company}</p> : null}
+                    <span className="muted">
+                      {[contact.email, contact.phone].filter(Boolean).join(" · ") ||
+                        "Aucune coordonnee"}
+                    </span>
+                    <span className="muted">
+                      {contact._count.reminders} relance(s)
+                    </span>
+                  </div>
+                  <form action={archiveContact}>
+                    <input type="hidden" name="id" value={contact.id} />
+                    <button className="button" type="submit">
+                      Archiver
+                    </button>
+                  </form>
+                </li>
+              ))}
+            </ul>
+          )}
+        </article>
       </div>
     </section>
   );
