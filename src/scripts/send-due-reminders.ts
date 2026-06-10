@@ -1,50 +1,41 @@
-import "dotenv/config";
-import { prisma } from "../lib/prisma";
-import { sendReminderEmail } from "../lib/email";
+import { ReminderStatus } from "@/generated/prisma/enums";
+import { prisma } from "@/lib/prisma";
+import { shouldNotifyReminder } from "@/modules/notifications/rules";
 
 async function main() {
-  const architectEmail = process.env.ARCHITECT_EMAIL;
-  const appUrl = process.env.APP_URL || "http://localhost:3000";
-
-  if (!architectEmail) {
-    throw new Error("ARCHITECT_EMAIL est requis.");
-  }
-
-  const dueReminders = await prisma.reminder.findMany({
+  const now = new Date();
+  const reminders = await prisma.reminder.findMany({
     where: {
-      status: "PENDING",
-      dueAt: { lte: new Date() },
-      notificationSentAt: null,
+      status: {
+        in: [ReminderStatus.UPCOMING, ReminderStatus.DUE, ReminderStatus.OVERDUE],
+      },
     },
-    orderBy: { dueAt: "asc" },
+    select: {
+      id: true,
+      title: true,
+      dueAt: true,
+      status: true,
+      lastNotifiedAt: true,
+    },
   });
 
-  for (const reminder of dueReminders) {
-    const result = await sendReminderEmail({
-      to: architectEmail,
-      projectName: reminder.projectName,
-      artisanName: reminder.artisanName,
-      artisanContact: reminder.artisanContact,
-      note: reminder.note,
-      dueAt: reminder.dueAt,
-      appUrl,
-    });
+  const dueReminders = reminders.filter((reminder) =>
+    shouldNotifyReminder(reminder, now),
+  );
 
-    if (result.sent) {
-      await prisma.reminder.update({
-        where: { id: reminder.id },
-        data: { notificationSentAt: new Date() },
-      });
-    }
-  }
-
-  console.log(`Processed ${dueReminders.length} due reminders.`);
+  console.log(
+    JSON.stringify({
+      checkedAt: now.toISOString(),
+      checked: reminders.length,
+      due: dueReminders.length,
+    }),
+  );
 }
 
 main()
   .catch((error) => {
     console.error(error);
-    process.exit(1);
+    process.exitCode = 1;
   })
   .finally(async () => {
     await prisma.$disconnect();

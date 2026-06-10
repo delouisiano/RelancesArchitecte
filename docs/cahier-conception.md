@@ -521,3 +521,99 @@ L'application est consideree terminee si:
 - la documentation explique installation, configuration, backup et restauration;
 - les tests critiques passent.
 
+## 14. Decisions fonctionnelles figees
+
+### 14.1 Ecrans a construire
+
+L'application cible contient les ecrans suivants:
+
+- Connexion.
+- Tableau de bord.
+- Relances.
+- Detail d'une relance.
+- Projets.
+- Contacts artisans.
+- Templates de mail.
+- Parametres.
+
+Le tableau de bord est l'ecran d'accueil apres connexion.
+
+### 14.2 Regles de statut des relances
+
+Les statuts stockes en base sont:
+
+- `UPCOMING`: relance a venir.
+- `DUE`: relance due aujourd'hui.
+- `OVERDUE`: relance en retard.
+- `SENT`: relance effectuee.
+- `POSTPONED`: relance reportee.
+- `CLOSED`: relance cloturee.
+- `ARCHIVED`: relance archivee.
+
+Les statuts `DUE` et `OVERDUE` peuvent etre recalcules a partir de la date d'echeance et de l'etat de traitement.
+
+Une relance cloturee ou archivee ne genere plus de notification.
+
+### 14.3 Workflow de relance
+
+Le workflow retenu est:
+
+1. Creation de la relance.
+2. Passage automatique en due ou overdue selon la date.
+3. Notification email a l'architecte.
+4. Generation manuelle du message de relance.
+5. Copie du message ou ouverture d'un brouillon `mailto:`.
+6. Marquage manuel comme relancee.
+7. Choix manuel entre reporter, cloturer ou archiver.
+
+L'application ne cree pas automatiquement une nouvelle echeance apres une relance. L'architecte choisit explicitement de reporter si necessaire.
+
+### 14.4 Regles de notification
+
+Le script de notification s'execute via systemd timer.
+
+Regles:
+
+- Notifier les relances due ou overdue.
+- Ne pas notifier les relances sent, closed ou archived.
+- Ne pas renvoyer plus d'une notification par relance sur une periode de 24 heures.
+- Enregistrer chaque tentative dans `NotificationLog`.
+- Enregistrer un evenement dans `ReminderEvent` quand une notification est envoyee.
+
+### 14.5 Strategie de suppression
+
+Les suppressions physiques sont evitees pour les entites metier.
+
+Regle:
+
+- Projet, contact, template et relance sont archives plutot que supprimes.
+- Les donnees archivees restent consultables.
+- Les vues principales masquent les donnees archivees par defaut.
+
+### 14.6 Configuration
+
+Les secrets sont uniquement dans `.env`.
+
+Variables minimales:
+
+- `DATABASE_URL`
+- `APP_BASE_URL`
+- `AUTH_USERNAME`
+- `AUTH_PASSWORD_HASH`
+- `AUTH_SECRET`
+- `ARCHITECT_EMAIL`
+- `SMTP_HOST`
+- `SMTP_PORT`
+- `SMTP_USER`
+- `SMTP_PASSWORD`
+- `SMTP_FROM`
+
+### 14.7 Critere de lancement du developpement
+
+Le developpement peut commencer quand:
+
+- le cahier de conception est versionne;
+- la branche de reconstruction est creee;
+- le schema Prisma cible est defini;
+- la structure modulaire est creee;
+- le premier build passe.
