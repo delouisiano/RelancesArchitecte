@@ -1,35 +1,9 @@
-import { ReminderStatus } from "@/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
-import { shouldNotifyReminder } from "@/modules/notifications/rules";
+import { sendDueReminders } from "@/modules/notifications/send-due-reminders";
 
 async function main() {
-  const now = new Date();
-  const reminders = await prisma.reminder.findMany({
-    where: {
-      status: {
-        in: [ReminderStatus.UPCOMING, ReminderStatus.DUE, ReminderStatus.OVERDUE],
-      },
-    },
-    select: {
-      id: true,
-      title: true,
-      dueAt: true,
-      status: true,
-      lastNotifiedAt: true,
-    },
-  });
-
-  const dueReminders = reminders.filter((reminder) =>
-    shouldNotifyReminder(reminder, now),
-  );
-
-  console.log(
-    JSON.stringify({
-      checkedAt: now.toISOString(),
-      checked: reminders.length,
-      due: dueReminders.length,
-    }),
-  );
+  const result = await sendDueReminders();
+  console.log(JSON.stringify({ checkedAt: new Date().toISOString(), ...result }));
 }
 
 main()

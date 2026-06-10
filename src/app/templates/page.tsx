@@ -1,4 +1,11 @@
-export default function TemplatesPage() {
+import { archiveTemplate, createTemplate } from "@/modules/templates/actions";
+import { listActiveTemplates } from "@/modules/templates/queries";
+
+export const dynamic = "force-dynamic";
+
+export default async function TemplatesPage() {
+  const templates = await listActiveTemplates();
+
   return (
     <section className="page">
       <div className="page-header">
@@ -6,10 +13,68 @@ export default function TemplatesPage() {
           <p className="eyebrow">Templates</p>
           <h2>Modeles de relance</h2>
           <p>
-            Les templates fourniront le sujet et le corps des messages, avec variables
+            Les templates fournissent le sujet et le corps des messages, avec variables
             de projet, contact, date et note.
           </p>
         </div>
+      </div>
+
+      <div className="split">
+        <form action={createTemplate} className="panel form-panel">
+          <h3>Nouveau template</h3>
+          <label>
+            Nom
+            <input name="name" required placeholder="Relance devis" />
+          </label>
+          <label>
+            Sujet
+            <input name="subject" required placeholder="Relance - {{projectName}}" />
+          </label>
+          <label>
+            Corps
+            <textarea
+              name="body"
+              required
+              rows={8}
+              placeholder="Bonjour {{contactName}}, ..."
+            />
+          </label>
+          <p className="muted">
+            Variables: {"{{projectName}}"}, {"{{contactName}}"}, {"{{contactCompany}}"},
+            {" {{dueAt}}"}, {"{{note}}"}
+          </p>
+          <button className="button primary" type="submit">
+            Creer le template
+          </button>
+        </form>
+
+        <article className="panel">
+          <div className="section-title">
+            <h3>Templates actifs</h3>
+            <span className="muted">{templates.length} template(s)</span>
+          </div>
+          {templates.length === 0 ? (
+            <p className="muted">Aucun template actif pour le moment.</p>
+          ) : (
+            <ul className="record-list">
+              {templates.map((template) => (
+                <li key={template.id}>
+                  <div>
+                    <strong>{template.name}</strong>
+                    <p>{template.subject}</p>
+                    <span className="muted">{template.body.slice(0, 140)}</span>
+                  </div>
+                  <form action={archiveTemplate}>
+                    <input type="hidden" name="id" value={template.id} />
+                    <button className="button" type="submit">
+                      Archiver
+                    </button>
+                  </form>
+                </li>
+              ))}
+            </ul>
+          )}
+        </article>
       </div>
     </section>
   );

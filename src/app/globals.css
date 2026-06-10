@@ -228,3 +228,60 @@ textarea {
     grid-template-columns: 1fr;
   }
 }
+
+select {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 10px 12px;
+  background: #fff;
+  color: var(--foreground);
+  font: inherit;
+}
+
+.narrow {
+  max-width: 620px;
+}
+
+.stack {
+  display: grid;
+  gap: 16px;
+}
+
+.inline-form {
+  display: grid;
+  gap: 10px;
+}
+
+.badge {
+  display: inline-flex;
+  width: fit-content;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  padding: 4px 10px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.mail-preview {
+  display: grid;
+  gap: 14px;
+}
+
+pre {
+  overflow: auto;
+  white-space: pre-wrap;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  background: #fbfbf9;
+  color: var(--foreground);
+  font: inherit;
+  line-height: 1.6;
+}
+
+.compact li {
+  display: block;
+}

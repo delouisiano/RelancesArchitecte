@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ReminderStatus } from "@/generated/prisma/enums";
 import { getReminderStatusLabel } from "@/modules/reminders/status";
 
@@ -27,9 +28,9 @@ export default function DashboardPage() {
             seront visibles ici des que les ecrans metier seront connectes a la base.
           </p>
         </div>
-        <a className="button" href="/reminders">
+        <Link className="button" href="/reminders">
           Voir les relances
-        </a>
+        </Link>
       </div>
 
       <div className="grid">

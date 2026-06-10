@@ -1024,3 +1024,11 @@ Cannot specify a encType or method for a form that specifies a function as the a
 }
  GET /templates 500 in 82ms (next.js: 1994µs, application-code: 80ms)
 [?25h
+
+> architect-relance@0.1.0 start
+> next start
+
+▲ Next.js 16.2.4
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.28:3000
+✓ Ready in 155ms
