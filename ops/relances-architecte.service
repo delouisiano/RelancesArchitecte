@@ -1,0 +1,16 @@
+[Unit]
+Description=Relances Architecte web application
+After=network.target
+
+[Service]
+Type=simple
+User=openclaw
+Group=openclaw
+WorkingDirectory=/home/openclaw/RelancesArchitecte
+EnvironmentFile=/home/openclaw/RelancesArchitecte/.env
+ExecStart=/usr/bin/npm start
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
