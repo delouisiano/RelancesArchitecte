@@ -38,7 +38,7 @@ export function resolveReminderStatus(
 export function getReminderStatusLabel(status: ReminderStatus): string {
   const labels: Record<ReminderStatus, string> = {
     [ReminderStatus.UPCOMING]: "A venir",
-    [ReminderStatus.DUE]: "Due",
+    [ReminderStatus.DUE]: "A traiter",
     [ReminderStatus.OVERDUE]: "En retard",
     [ReminderStatus.SENT]: "Relancee",
     [ReminderStatus.POSTPONED]: "Reportee",

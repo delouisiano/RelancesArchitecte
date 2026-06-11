@@ -58,9 +58,9 @@ export default async function RemindersPage() {
             </select>
           </label>
           <label>
-            Template
+            Modele de message
             <select name="templateId">
-              <option value="">Aucun template</option>
+              <option value="">Aucun modele</option>
               {templates.map((template) => (
                 <option key={template.id} value={template.id}>
                   {template.name}

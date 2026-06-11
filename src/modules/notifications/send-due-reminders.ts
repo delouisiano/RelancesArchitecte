@@ -51,7 +51,7 @@ export async function sendDueReminders(now = new Date()) {
     try {
       await sendMail({
         to: settings.architectEmail,
-        subject: `Relance due - ${reminder.title}`,
+        subject: `Relance a traiter - ${reminder.title}`,
         text: [
           `Projet: ${reminder.project.name}`,
           `Contact: ${reminder.contact.name}`,

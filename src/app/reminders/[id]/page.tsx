@@ -5,11 +5,32 @@ import {
   markReminderSent,
   postponeReminder,
 } from "@/modules/reminders/actions";
+import { ReminderEventType } from "@/generated/prisma/enums";
 import { getReminder } from "@/modules/reminders/queries";
 import { getReminderStatusLabel, resolveReminderStatus } from "@/modules/reminders/status";
+import { getSettings } from "@/modules/settings/queries";
 import { renderTemplate } from "@/modules/templates/render";
 
 export const dynamic = "force-dynamic";
+
+const eventLabels: Record<ReminderEventType, string> = {
+  [ReminderEventType.CREATED]: "Creation",
+  [ReminderEventType.UPDATED]: "Mise a jour",
+  [ReminderEventType.POSTPONED]: "Report",
+  [ReminderEventType.NOTIFICATION_SENT]: "Notification envoyee",
+  [ReminderEventType.NOTIFICATION_FAILED]: "Notification echouee",
+  [ReminderEventType.MAIL_GENERATED]: "Message prepare",
+  [ReminderEventType.SENT]: "Relance envoyee",
+  [ReminderEventType.CLOSED]: "Cloture",
+  [ReminderEventType.ARCHIVED]: "Archivage",
+};
+
+function formatDateTime(date: Date): string {
+  return new Intl.DateTimeFormat("fr-FR", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(date);
+}
 
 export default async function ReminderDetailPage({
   params,
@@ -17,7 +38,7 @@ export default async function ReminderDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const reminder = await getReminder(id);
+  const [reminder, settings] = await Promise.all([getReminder(id), getSettings()]);
 
   if (!reminder) {
     notFound();
@@ -33,6 +54,7 @@ export default async function ReminderDetailPage({
         contactCompany: reminder.contact.company,
         dueAt: reminder.dueAt,
         note: reminder.note,
+        architectName: settings?.architectName,
       })
     : null;
   const mailto =
@@ -104,7 +126,7 @@ export default async function ReminderDetailPage({
                 )}
               </div>
             ) : (
-              <p className="muted">Aucun template associe a cette relance.</p>
+              <p className="muted">Aucun modele associe a cette relance.</p>
             )}
           </article>
 
@@ -117,9 +139,9 @@ export default async function ReminderDetailPage({
                 {reminder.events.map((event) => (
                   <li key={event.id}>
                     <div>
-                      <strong>{event.type}</strong>
+                      <strong>{eventLabels[event.type]}</strong>
                       <p>{event.message}</p>
-                      <span className="muted">{event.createdAt.toISOString()}</span>
+                      <span className="muted">{formatDateTime(event.createdAt)}</span>
                     </div>
                   </li>
                 ))}

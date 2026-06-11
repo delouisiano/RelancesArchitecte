@@ -1,22 +1,85 @@
 import Link from "next/link";
-import { ReminderStatus } from "@/generated/prisma/enums";
+import { ArchiveStatus, ReminderStatus } from "@/generated/prisma/enums";
+import { prisma } from "@/lib/prisma";
+import { listWorkReminders } from "@/modules/reminders/queries";
 import { getReminderStatusLabel } from "@/modules/reminders/status";
 
-const metrics = [
-  { label: "Dues aujourd'hui", value: 0 },
-  { label: "En retard", value: 0 },
-  { label: "A venir", value: 0 },
-  { label: "Cloturees", value: 0 },
-];
+export const dynamic = "force-dynamic";
 
 const statuses = [
-  ReminderStatus.DUE,
-  ReminderStatus.OVERDUE,
-  ReminderStatus.UPCOMING,
-  ReminderStatus.SENT,
+  {
+    status: ReminderStatus.DUE,
+    description: "Relance a traiter aujourd'hui.",
+  },
+  {
+    status: ReminderStatus.OVERDUE,
+    description: "Relance dont l'echeance est depassee.",
+  },
+  {
+    status: ReminderStatus.UPCOMING,
+    description: "Relance programmee pour plus tard.",
+  },
+  {
+    status: ReminderStatus.SENT,
+    description: "Relance deja envoyee a l'entreprise.",
+  },
+  {
+    status: ReminderStatus.POSTPONED,
+    description: "Relance reportee a une nouvelle date.",
+  },
+  {
+    status: ReminderStatus.CLOSED,
+    description: "Sujet cloture, aucune action attendue.",
+  },
 ];
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const [reminders, activeProjects, activeContacts, activeTemplates] = await Promise.all([
+    listWorkReminders(),
+    prisma.project.count({ where: { status: ArchiveStatus.ACTIVE } }),
+    prisma.contact.count({ where: { status: ArchiveStatus.ACTIVE } }),
+    prisma.template.count({ where: { status: ArchiveStatus.ACTIVE } }),
+  ]);
+
+  const countByStatus = new Map<ReminderStatus, number>();
+  for (const reminder of reminders) {
+    countByStatus.set(
+      reminder.computedStatus,
+      (countByStatus.get(reminder.computedStatus) ?? 0) + 1,
+    );
+  }
+
+  const metrics = [
+    {
+      label: "A traiter aujourd'hui",
+      value: countByStatus.get(ReminderStatus.DUE) ?? 0,
+    },
+    {
+      label: "En retard",
+      value: countByStatus.get(ReminderStatus.OVERDUE) ?? 0,
+    },
+    {
+      label: "A venir",
+      value: countByStatus.get(ReminderStatus.UPCOMING) ?? 0,
+    },
+    {
+      label: "Relancees",
+      value: countByStatus.get(ReminderStatus.SENT) ?? 0,
+    },
+    {
+      label: "Projets actifs",
+      value: activeProjects,
+    },
+    {
+      label: "Contacts actifs",
+      value: activeContacts,
+    },
+    {
+      label: "Modeles actifs",
+      value: activeTemplates,
+    },
+  ];
+
   return (
     <section className="page">
       <div className="page-header">
@@ -24,8 +87,8 @@ export default function DashboardPage() {
           <p className="eyebrow">Tableau de bord</p>
           <h2>Priorites de relance</h2>
           <p>
-            Point d&apos;entree de l&apos;application: les relances dues, en retard et a venir
-            seront visibles ici des que les ecrans metier seront connectes a la base.
+            Vue d&apos;ensemble des relances a traiter, des echeances en retard et des
+            dossiers actifs.
           </p>
         </div>
         <Link className="button" href="/reminders">
@@ -43,12 +106,12 @@ export default function DashboardPage() {
       </div>
 
       <article className="panel">
-        <h3>Statuts cibles</h3>
+        <h3>Lecture des statuts</h3>
         <ul className="status-list">
-          {statuses.map((status) => (
-            <li key={status}>
-              <span>{getReminderStatusLabel(status)}</span>
-              <span className="muted">{status}</span>
+          {statuses.map((item) => (
+            <li key={item.status}>
+              <span>{getReminderStatusLabel(item.status)}</span>
+              <span className="muted">{item.description}</span>
             </li>
           ))}
         </ul>

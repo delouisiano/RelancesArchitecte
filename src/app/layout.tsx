@@ -12,7 +12,7 @@ const navigation = [
   { href: "/reminders", label: "Relances" },
   { href: "/projects", label: "Projets" },
   { href: "/contacts", label: "Contacts" },
-  { href: "/templates", label: "Templates" },
+  { href: "/templates", label: "Modeles" },
   { href: "/settings", label: "Parametres" },
 ];
 

@@ -10,10 +10,10 @@ export default async function TemplatesPage() {
     <section className="page">
       <div className="page-header">
         <div>
-          <p className="eyebrow">Templates</p>
+          <p className="eyebrow">Modeles</p>
           <h2>Modeles de relance</h2>
           <p>
-            Les templates fournissent le sujet et le corps des messages, avec variables
+            Les modeles fournissent le sujet et le corps des messages, avec variables
             de projet, contact, date et note.
           </p>
         </div>
@@ -21,14 +21,14 @@ export default async function TemplatesPage() {
 
       <div className="split">
         <form action={createTemplate} className="panel form-panel">
-          <h3>Nouveau template</h3>
+          <h3>Nouveau modele</h3>
           <label>
             Nom
             <input name="name" required placeholder="Relance devis" />
           </label>
           <label>
             Sujet
-            <input name="subject" required placeholder="Relance - {{projectName}}" />
+            <input name="subject" required placeholder="Relance - {{nomProjet}}" />
           </label>
           <label>
             Corps
@@ -36,25 +36,25 @@ export default async function TemplatesPage() {
               name="body"
               required
               rows={8}
-              placeholder="Bonjour {{contactName}}, ..."
+              placeholder="Bonjour {{nomContact}}, ..."
             />
           </label>
           <p className="muted">
-            Variables: {"{{projectName}}"}, {"{{contactName}}"}, {"{{contactCompany}}"},
-            {" {{dueAt}}"}, {"{{note}}"}
+            Variables: {"{{nomProjet}}"}, {"{{nomContact}}"}, {"{{entrepriseContact}}"},
+            {" {{echeance}}"}, {"{{note}}"}, {"{{nomArchitecte}}"}
           </p>
           <button className="button primary" type="submit">
-            Creer le template
+            Creer le modele
           </button>
         </form>
 
         <article className="panel">
           <div className="section-title">
-            <h3>Templates actifs</h3>
-            <span className="muted">{templates.length} template(s)</span>
+            <h3>Modeles actifs</h3>
+            <span className="muted">{templates.length} modele(s)</span>
           </div>
           {templates.length === 0 ? (
-            <p className="muted">Aucun template actif pour le moment.</p>
+            <p className="muted">Aucun modele actif pour le moment.</p>
           ) : (
             <ul className="record-list">
               {templates.map((template) => (

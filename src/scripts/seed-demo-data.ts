@@ -96,37 +96,37 @@ const templates = [
   {
     id: "demo-template-devis",
     name: "Relance devis",
-    subject: "Relance devis - {{projectName}}",
+    subject: "Relance devis - {{nomProjet}}",
     body:
-      "Bonjour {{contactName}},\n\nJe me permets de revenir vers vous concernant le devis attendu pour le projet {{projectName}}.\n\nPouvez-vous me confirmer une date d'envoi ?\n\nBien cordialement,\n{{architectName}}",
+      "Bonjour {{nomContact}},\n\nJe me permets de revenir vers vous concernant le devis attendu pour le projet {{nomProjet}}.\n\nPouvez-vous me confirmer une date d'envoi ?\n\nBien cordialement,\n{{nomArchitecte}}",
   },
   {
     id: "demo-template-planning",
     name: "Confirmation planning",
-    subject: "Planning d'intervention - {{projectName}}",
+    subject: "Planning d'intervention - {{nomProjet}}",
     body:
-      "Bonjour {{contactName}},\n\nPouvez-vous me confirmer vos disponibilites d'intervention pour le projet {{projectName}} ?\n\nL'objectif est de stabiliser le planning avec les autres corps d'etat.\n\nBien cordialement,\n{{architectName}}",
+      "Bonjour {{nomContact}},\n\nPouvez-vous me confirmer vos disponibilites d'intervention pour le projet {{nomProjet}} ?\n\nL'objectif est de stabiliser le planning avec les autres corps d'etat.\n\nBien cordialement,\n{{nomArchitecte}}",
   },
   {
     id: "demo-template-documents",
     name: "Pieces techniques manquantes",
-    subject: "Documents attendus - {{projectName}}",
+    subject: "Documents attendus - {{nomProjet}}",
     body:
-      "Bonjour {{contactName}},\n\nJe reviens vers vous concernant les elements techniques attendus pour {{projectName}}.\n\nPouvez-vous me transmettre les documents manquants ou me dire quand ils seront disponibles ?\n\nBien cordialement,\n{{architectName}}",
+      "Bonjour {{nomContact}},\n\nJe reviens vers vous concernant les elements techniques attendus pour {{nomProjet}}.\n\nPouvez-vous me transmettre les documents manquants ou me dire quand ils seront disponibles ?\n\nBien cordialement,\n{{nomArchitecte}}",
   },
   {
     id: "demo-template-retour-visite",
     name: "Retour apres visite chantier",
-    subject: "Retour suite a la visite - {{projectName}}",
+    subject: "Retour suite a la visite - {{nomProjet}}",
     body:
-      "Bonjour {{contactName}},\n\nSuite a notre visite sur le projet {{projectName}}, pouvez-vous me faire un retour sur les points evoques et les eventuelles reserves ?\n\nMerci d'avance,\n{{architectName}}",
+      "Bonjour {{nomContact}},\n\nSuite a notre visite sur le projet {{nomProjet}}, pouvez-vous me faire un retour sur les points evoques et les eventuelles reserves ?\n\nMerci d'avance,\n{{nomArchitecte}}",
   },
   {
     id: "demo-template-validation",
     name: "Validation avant commande",
-    subject: "Validation avant commande - {{projectName}}",
+    subject: "Validation avant commande - {{nomProjet}}",
     body:
-      "Bonjour {{contactName}},\n\nAvant lancement de la commande pour {{projectName}}, pouvez-vous me confirmer les derniers elements : prix, delai et caracteristiques techniques ?\n\nBien cordialement,\n{{architectName}}",
+      "Bonjour {{nomContact}},\n\nAvant lancement de la commande pour {{nomProjet}}, pouvez-vous me confirmer les derniers elements : prix, delai et caracteristiques techniques ?\n\nBien cordialement,\n{{nomArchitecte}}",
   },
 ];
 
