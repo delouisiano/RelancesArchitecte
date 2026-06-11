@@ -9,6 +9,7 @@
     "lint": "eslint",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
+    "db:seed": "tsx src/scripts/seed-demo-data.ts",
     "reminders:run": "tsx src/scripts/send-due-reminders.ts",
     "test": "node --import tsx --test src/**/*.test.ts"
   },
