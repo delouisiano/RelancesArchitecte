@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { ArchiveStatus, ReminderStatus } from "@/generated/prisma/enums";
-import { prisma } from "@/lib/prisma";
+import { ReminderStatus } from "@/generated/prisma/enums";
 import { listWorkReminders } from "@/modules/reminders/queries";
 import { getReminderStatusLabel } from "@/modules/reminders/status";
 
@@ -34,12 +33,7 @@ const statuses = [
 ];
 
 export default async function DashboardPage() {
-  const [reminders, activeProjects, activeContacts, activeTemplates] = await Promise.all([
-    listWorkReminders(),
-    prisma.project.count({ where: { status: ArchiveStatus.ACTIVE } }),
-    prisma.contact.count({ where: { status: ArchiveStatus.ACTIVE } }),
-    prisma.template.count({ where: { status: ArchiveStatus.ACTIVE } }),
-  ]);
+  const reminders = await listWorkReminders();
 
   const countByStatus = new Map<ReminderStatus, number>();
   for (const reminder of reminders) {
@@ -62,22 +56,6 @@ export default async function DashboardPage() {
       label: "A venir",
       value: countByStatus.get(ReminderStatus.UPCOMING) ?? 0,
     },
-    {
-      label: "Relancees",
-      value: countByStatus.get(ReminderStatus.SENT) ?? 0,
-    },
-    {
-      label: "Projets actifs",
-      value: activeProjects,
-    },
-    {
-      label: "Contacts actifs",
-      value: activeContacts,
-    },
-    {
-      label: "Modeles actifs",
-      value: activeTemplates,
-    },
   ];
 
   return (
@@ -88,7 +66,7 @@ export default async function DashboardPage() {
           <h2>Priorites de relance</h2>
           <p>
             Vue d&apos;ensemble des relances a traiter, des echeances en retard et des
-            dossiers actifs.
+            relances a venir.
           </p>
         </div>
         <Link className="button" href="/reminders">
