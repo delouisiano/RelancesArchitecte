@@ -1,3 +1,4 @@
+import { CreateDialog } from "@/components/create-dialog";
 import { archiveContact, createContact } from "@/modules/contacts/actions";
 import { listActiveContacts } from "@/modules/contacts/queries";
 
@@ -19,35 +20,8 @@ export default async function ContactsPage() {
         </div>
       </div>
 
-      <div className="split">
-        <form action={createContact} className="panel form-panel">
-          <h3>Nouveau contact</h3>
-          <label>
-            Nom
-            <input name="name" required placeholder="Jean Martin" />
-          </label>
-          <label>
-            Entreprise
-            <input name="company" placeholder="Martin Couverture" />
-          </label>
-          <label>
-            Email
-            <input name="email" type="email" placeholder="contact@example.fr" />
-          </label>
-          <label>
-            Telephone
-            <input name="phone" placeholder="06 00 00 00 00" />
-          </label>
-          <label>
-            Notes
-            <textarea name="notes" placeholder="Specialite, disponibilites, contexte" rows={4} />
-          </label>
-          <button className="button primary" type="submit">
-            Creer le contact
-          </button>
-        </form>
-
-        <article className="panel">
+      <div className="center-list">
+        <article className="panel list-panel">
           <div className="section-title">
             <h3>Contacts actifs</h3>
             <span className="muted">{contacts.length} contact(s)</span>
@@ -81,6 +55,34 @@ export default async function ContactsPage() {
           )}
         </article>
       </div>
+
+      <CreateDialog buttonLabel="Ajouter un contact" title="Nouveau contact">
+        <form action={createContact} className="panel form-panel">
+          <label>
+            Nom
+            <input name="name" required placeholder="Jean Martin" />
+          </label>
+          <label>
+            Entreprise
+            <input name="company" placeholder="Martin Couverture" />
+          </label>
+          <label>
+            Email
+            <input name="email" type="email" placeholder="contact@example.fr" />
+          </label>
+          <label>
+            Telephone
+            <input name="phone" placeholder="06 00 00 00 00" />
+          </label>
+          <label>
+            Notes
+            <textarea name="notes" placeholder="Specialite, disponibilites, contexte" rows={4} />
+          </label>
+          <button className="button primary" type="submit">
+            Creer le contact
+          </button>
+        </form>
+      </CreateDialog>
     </section>
   );
 }

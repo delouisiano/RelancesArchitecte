@@ -1,3 +1,4 @@
+import { CreateDialog } from "@/components/create-dialog";
 import { archiveTemplate, createTemplate } from "@/modules/templates/actions";
 import { listActiveTemplates } from "@/modules/templates/queries";
 
@@ -19,36 +20,8 @@ export default async function TemplatesPage() {
         </div>
       </div>
 
-      <div className="split">
-        <form action={createTemplate} className="panel form-panel">
-          <h3>Nouveau modele</h3>
-          <label>
-            Nom
-            <input name="name" required placeholder="Relance devis" />
-          </label>
-          <label>
-            Sujet
-            <input name="subject" required placeholder="Relance - {{nomProjet}}" />
-          </label>
-          <label>
-            Corps
-            <textarea
-              name="body"
-              required
-              rows={8}
-              placeholder="Bonjour {{nomContact}}, ..."
-            />
-          </label>
-          <p className="muted">
-            Variables: {"{{nomProjet}}"}, {"{{nomContact}}"}, {"{{entrepriseContact}}"},
-            {" {{echeance}}"}, {"{{note}}"}, {"{{nomArchitecte}}"}
-          </p>
-          <button className="button primary" type="submit">
-            Creer le modele
-          </button>
-        </form>
-
-        <article className="panel">
+      <div className="center-list">
+        <article className="panel list-panel">
           <div className="section-title">
             <h3>Modeles actifs</h3>
             <span className="muted">{templates.length} modele(s)</span>
@@ -76,6 +49,35 @@ export default async function TemplatesPage() {
           )}
         </article>
       </div>
+
+      <CreateDialog buttonLabel="Ajouter un modele" title="Nouveau modele">
+        <form action={createTemplate} className="panel form-panel">
+          <label>
+            Nom
+            <input name="name" required placeholder="Relance devis" />
+          </label>
+          <label>
+            Sujet
+            <input name="subject" required placeholder="Relance - {{nomProjet}}" />
+          </label>
+          <label>
+            Corps
+            <textarea
+              name="body"
+              required
+              rows={8}
+              placeholder="Bonjour {{nomContact}}, ..."
+            />
+          </label>
+          <p className="muted">
+            Variables: {"{{nomProjet}}"}, {"{{nomContact}}"}, {"{{entrepriseContact}}"},
+            {" {{echeance}}"}, {"{{note}}"}, {"{{nomArchitecte}}"}
+          </p>
+          <button className="button primary" type="submit">
+            Creer le modele
+          </button>
+        </form>
+      </CreateDialog>
     </section>
   );
 }

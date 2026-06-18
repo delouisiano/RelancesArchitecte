@@ -1,3 +1,4 @@
+import { CreateDialog } from "@/components/create-dialog";
 import { archiveProject, createProject } from "@/modules/projects/actions";
 import { listActiveProjects } from "@/modules/projects/queries";
 
@@ -19,27 +20,8 @@ export default async function ProjectsPage() {
         </div>
       </div>
 
-      <div className="split">
-        <form action={createProject} className="panel form-panel">
-          <h3>Nouveau projet</h3>
-          <label>
-            Nom
-            <input name="name" required placeholder="Maison Dupont" />
-          </label>
-          <label>
-            Description
-            <textarea
-              name="description"
-              placeholder="Contexte, adresse ou phase du dossier"
-              rows={4}
-            />
-          </label>
-          <button className="button primary" type="submit">
-            Creer le projet
-          </button>
-        </form>
-
-        <article className="panel">
+      <div className="center-list">
+        <article className="panel list-panel">
           <div className="section-title">
             <h3>Projets actifs</h3>
             <span className="muted">{projects.length} projet(s)</span>
@@ -69,6 +51,26 @@ export default async function ProjectsPage() {
           )}
         </article>
       </div>
+
+      <CreateDialog buttonLabel="Ajouter un projet" title="Nouveau projet">
+        <form action={createProject} className="panel form-panel">
+          <label>
+            Nom
+            <input name="name" required placeholder="Maison Dupont" />
+          </label>
+          <label>
+            Description
+            <textarea
+              name="description"
+              placeholder="Contexte, adresse ou phase du dossier"
+              rows={4}
+            />
+          </label>
+          <button className="button primary" type="submit">
+            Creer le projet
+          </button>
+        </form>
+      </CreateDialog>
     </section>
   );
 }

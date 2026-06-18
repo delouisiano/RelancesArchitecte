@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ReminderStatus } from "@/generated/prisma/enums";
+import { listActiveProjectsByLastInteraction } from "@/modules/projects/queries";
 import { listWorkReminders } from "@/modules/reminders/queries";
 import { getReminderStatusLabel } from "@/modules/reminders/status";
 
@@ -33,7 +34,10 @@ const statuses = [
 ];
 
 export default async function DashboardPage() {
-  const reminders = await listWorkReminders();
+  const [reminders, projects] = await Promise.all([
+    listWorkReminders(),
+    listActiveProjectsByLastInteraction(),
+  ]);
 
   const countByStatus = new Map<ReminderStatus, number>();
   for (const reminder of reminders) {
@@ -82,6 +86,36 @@ export default async function DashboardPage() {
           </article>
         ))}
       </div>
+
+      <article className="panel">
+        <div className="section-title">
+          <h3>Projets recents</h3>
+          <Link className="button" href="/projects">
+            Voir tous
+          </Link>
+        </div>
+        {projects.length === 0 ? (
+          <p className="muted">Aucun projet actif pour le moment.</p>
+        ) : (
+          <ul className="record-list project-list">
+            {projects.slice(0, 8).map((project) => (
+              <li key={project.id}>
+                <div>
+                  <strong>{project.name}</strong>
+                  {project.description ? <p>{project.description}</p> : null}
+                  <span className="muted">
+                    {project._count.reminders} relance(s)
+                  </span>
+                </div>
+                <span className="muted">
+                  Derniere interaction:{" "}
+                  {project.lastInteractionAt.toLocaleDateString("fr-FR")}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </article>
 
       <article className="panel">
         <h3>Lecture des statuts</h3>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CreateDialog } from "@/components/create-dialog";
 import { createReminder } from "@/modules/reminders/actions";
 import { listWorkReminders } from "@/modules/reminders/queries";
 import { getReminderStatusLabel } from "@/modules/reminders/status";
@@ -28,9 +29,42 @@ export default async function RemindersPage() {
         </div>
       </div>
 
-      <div className="split">
+      <div className="center-list">
+        <article className="panel list-panel">
+          <div className="section-title">
+            <h3>Relances actives</h3>
+            <span className="muted">{reminders.length} relance(s)</span>
+          </div>
+          {reminders.length === 0 ? (
+            <p className="muted">Aucune relance active pour le moment.</p>
+          ) : (
+            <ul className="record-list">
+              {reminders.map((reminder) => (
+                <li key={reminder.id}>
+                  <div>
+                    <strong>{reminder.title}</strong>
+                    <p>
+                      {reminder.project.name} · {reminder.contact.name}
+                    </p>
+                    <span className="badge">
+                      {getReminderStatusLabel(reminder.computedStatus)}
+                    </span>
+                    <span className="muted">
+                      Echeance: {reminder.dueAt.toISOString().slice(0, 10)}
+                    </span>
+                  </div>
+                  <Link className="button" href={`/reminders/${reminder.id}`}>
+                    Ouvrir
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </article>
+      </div>
+
+      <CreateDialog buttonLabel="Ajouter une relance" title="Nouvelle relance">
         <form action={createReminder} className="panel form-panel">
-          <h3>Nouvelle relance</h3>
           <label>
             Titre
             <input name="title" required placeholder="Relancer le devis plomberie" />
@@ -80,39 +114,7 @@ export default async function RemindersPage() {
             Creer la relance
           </button>
         </form>
-
-        <article className="panel">
-          <div className="section-title">
-            <h3>Relances actives</h3>
-            <span className="muted">{reminders.length} relance(s)</span>
-          </div>
-          {reminders.length === 0 ? (
-            <p className="muted">Aucune relance active pour le moment.</p>
-          ) : (
-            <ul className="record-list">
-              {reminders.map((reminder) => (
-                <li key={reminder.id}>
-                  <div>
-                    <strong>{reminder.title}</strong>
-                    <p>
-                      {reminder.project.name} · {reminder.contact.name}
-                    </p>
-                    <span className="badge">
-                      {getReminderStatusLabel(reminder.computedStatus)}
-                    </span>
-                    <span className="muted">
-                      Echeance: {reminder.dueAt.toISOString().slice(0, 10)}
-                    </span>
-                  </div>
-                  <Link className="button" href={`/reminders/${reminder.id}`}>
-                    Ouvrir
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
-        </article>
-      </div>
+      </CreateDialog>
     </section>
   );
 }
