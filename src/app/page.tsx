@@ -87,9 +87,12 @@ export default async function DashboardPage() {
         ))}
       </div>
 
-      <article className="panel">
+      <section className="dossier-section">
         <div className="section-title">
-          <h3>Projets recents</h3>
+          <div>
+            <p className="eyebrow">Dossiers</p>
+            <h3>Dossiers recents</h3>
+          </div>
           <Link className="button" href="/projects">
             Voir tous
           </Link>
@@ -97,25 +100,23 @@ export default async function DashboardPage() {
         {projects.length === 0 ? (
           <p className="muted">Aucun projet actif pour le moment.</p>
         ) : (
-          <ul className="record-list project-list">
-            {projects.slice(0, 8).map((project) => (
-              <li key={project.id}>
-                <div>
-                  <strong>{project.name}</strong>
-                  {project.description ? <p>{project.description}</p> : null}
-                  <span className="muted">
-                    {project._count.reminders} relance(s)
+          <ul className="dossier-grid">
+            {projects.map((project) => (
+              <li className="dossier-card" key={project.id}>
+                <span className="dossier-tab" aria-hidden="true" />
+                <strong>{project.name}</strong>
+                {project.description ? <p>{project.description}</p> : null}
+                <div className="dossier-meta">
+                  <span>{project._count.reminders} relance(s)</span>
+                  <span>
+                    {project.lastInteractionAt.toLocaleDateString("fr-FR")}
                   </span>
                 </div>
-                <span className="muted">
-                  Derniere interaction:{" "}
-                  {project.lastInteractionAt.toLocaleDateString("fr-FR")}
-                </span>
               </li>
             ))}
           </ul>
         )}
-      </article>
+      </section>
 
       <article className="panel">
         <h3>Lecture des statuts</h3>
