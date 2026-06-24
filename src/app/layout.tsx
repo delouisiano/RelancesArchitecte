@@ -8,12 +8,12 @@ export const metadata: Metadata = {
 };
 
 const navigation = [
-  { href: "/", label: "Accueil", icon: "M4 13h5V4h6v9h5l-8 7-8-7z" },
+  { href: "/", label: "Accueil", icon: "M3 11.5 12 4l9 7.5V21h-6v-6H9v6H3z" },
   { href: "/reminders", label: "Relances", icon: "M5 4h14v16H5z M8 8h8 M8 12h8 M8 16h5" },
   { href: "/projects", label: "Projets", icon: "M3 7h7l2 3h9v9H3z" },
   { href: "/contacts", label: "Contacts", icon: "M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z M4 21a8 8 0 0 1 16 0" },
   { href: "/templates", label: "Modeles", icon: "M6 3h9l3 3v15H6z M14 3v4h4 M9 12h6 M9 16h6" },
-  { href: "/settings", label: "Parametres", icon: "M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z M12 2v3 M12 19v3 M4.2 4.2l2.1 2.1 M17.7 17.7l2.1 2.1 M2 12h3 M19 12h3 M4.2 19.8l2.1-2.1 M17.7 6.3l2.1-2.1" },
+  { href: "/settings", label: "Parametres", icon: "M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" },
 ];
 
 export default function RootLayout({
