@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { CreateDialog } from "@/components/create-dialog";
 import { archiveProject, createProject } from "@/modules/projects/actions";
 import { listActiveProjects } from "@/modules/projects/queries";
@@ -33,18 +34,25 @@ export default async function ProjectsPage() {
               {projects.map((project) => (
                 <li key={project.id}>
                   <div>
-                    <strong>{project.name}</strong>
+                    <strong>
+                      <Link href={`/projects/${project.id}`}>{project.name}</Link>
+                    </strong>
                     {project.description ? <p>{project.description}</p> : null}
                     <span className="muted">
                       {project._count.reminders} relance(s)
                     </span>
                   </div>
-                  <form action={archiveProject}>
-                    <input type="hidden" name="id" value={project.id} />
-                    <button className="button" type="submit">
-                      Archiver
-                    </button>
-                  </form>
+                  <div className="record-actions">
+                    <Link className="button" href={`/projects/${project.id}`}>
+                      Ouvrir
+                    </Link>
+                    <form action={archiveProject}>
+                      <input type="hidden" name="id" value={project.id} />
+                      <button className="button" type="submit">
+                        Archiver
+                      </button>
+                    </form>
+                  </div>
                 </li>
               ))}
             </ul>

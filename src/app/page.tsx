@@ -102,16 +102,18 @@ export default async function DashboardPage() {
         ) : (
           <ul className="dossier-grid">
             {projects.map((project) => (
-              <li className="dossier-card" key={project.id}>
-                <span className="dossier-tab" aria-hidden="true" />
-                <strong>{project.name}</strong>
-                {project.description ? <p>{project.description}</p> : null}
-                <div className="dossier-meta">
-                  <span>{project._count.reminders} relance(s)</span>
-                  <span>
-                    {project.lastInteractionAt.toLocaleDateString("fr-FR")}
-                  </span>
-                </div>
+              <li key={project.id}>
+                <Link className="dossier-card" href={`/projects/${project.id}`}>
+                  <span className="dossier-tab" aria-hidden="true" />
+                  <strong>{project.name}</strong>
+                  {project.description ? <p>{project.description}</p> : null}
+                  <div className="dossier-meta">
+                    <span>{project._count.reminders} relance(s)</span>
+                    <span>
+                      {project.lastInteractionAt.toLocaleDateString("fr-FR")}
+                    </span>
+                  </div>
+                </Link>
               </li>
             ))}
           </ul>

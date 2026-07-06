@@ -1,7 +1,8 @@
 import Link from "next/link";
+import { ReminderStatus } from "@/generated/prisma/enums";
 import { CreateDialog } from "@/components/create-dialog";
 import { createReminder } from "@/modules/reminders/actions";
-import { listWorkReminders } from "@/modules/reminders/queries";
+import { listWorkReminders, type ReminderFilters, type ReminderSort } from "@/modules/reminders/queries";
 import { getReminderStatusLabel } from "@/modules/reminders/status";
 import { listActiveContacts } from "@/modules/contacts/queries";
 import { listActiveProjects } from "@/modules/projects/queries";
@@ -9,9 +10,64 @@ import { listActiveTemplates } from "@/modules/templates/queries";
 
 export const dynamic = "force-dynamic";
 
-export default async function RemindersPage() {
+const statusOptions: ReminderStatus[] = [
+  ReminderStatus.DUE,
+  ReminderStatus.OVERDUE,
+  ReminderStatus.UPCOMING,
+  ReminderStatus.SENT,
+  ReminderStatus.POSTPONED,
+  ReminderStatus.CLOSED,
+];
+
+const sortOptions: { value: ReminderSort; label: string }[] = [
+  { value: "due-asc", label: "Echeance proche" },
+  { value: "due-desc", label: "Echeance lointaine" },
+  { value: "project", label: "Projet" },
+  { value: "status", label: "Tag / statut" },
+];
+
+function getSingleParam(value: string | string[] | undefined) {
+  return Array.isArray(value) ? value[0] : value;
+}
+
+function parseDateParam(value: string | undefined, endOfDay = false) {
+  if (!value) {
+    return undefined;
+  }
+
+  const date = new Date(`${value}T${endOfDay ? "23:59:59.999" : "00:00:00.000"}`);
+  return Number.isNaN(date.getTime()) ? undefined : date;
+}
+
+function parseStatus(value: string | undefined) {
+  return statusOptions.includes(value as ReminderStatus) ? (value as ReminderStatus) : undefined;
+}
+
+function parseSort(value: string | undefined): ReminderSort {
+  return sortOptions.some((option) => option.value === value) ? (value as ReminderSort) : "due-asc";
+}
+
+export default async function RemindersPage({
+  searchParams,
+}: {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const params = (await searchParams) ?? {};
+  const selectedProjectId = getSingleParam(params.projectId) ?? "";
+  const selectedStatus = parseStatus(getSingleParam(params.status));
+  const dueFromValue = getSingleParam(params.dueFrom) ?? "";
+  const dueToValue = getSingleParam(params.dueTo) ?? "";
+  const selectedSort = parseSort(getSingleParam(params.sort));
+  const filters: ReminderFilters = {
+    projectId: selectedProjectId || undefined,
+    status: selectedStatus,
+    dueFrom: parseDateParam(dueFromValue),
+    dueTo: parseDateParam(dueToValue, true),
+    sort: selectedSort,
+  };
+
   const [reminders, projects, contacts, templates] = await Promise.all([
-    listWorkReminders(),
+    listWorkReminders(filters),
     listActiveProjects(),
     listActiveContacts(),
     listActiveTemplates(),
@@ -29,6 +85,57 @@ export default async function RemindersPage() {
         </div>
       </div>
 
+      <form className="panel filter-panel" method="get" action="/reminders">
+        <label>
+          Tag / statut
+          <select name="status" defaultValue={selectedStatus ?? ""}>
+            <option value="">Tous</option>
+            {statusOptions.map((status) => (
+              <option key={status} value={status}>
+                {getReminderStatusLabel(status)}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Projet
+          <select name="projectId" defaultValue={selectedProjectId}>
+            <option value="">Tous les projets</option>
+            {projects.map((project) => (
+              <option key={project.id} value={project.id}>
+                {project.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Echeance debut
+          <input name="dueFrom" type="date" defaultValue={dueFromValue} />
+        </label>
+        <label>
+          Echeance fin
+          <input name="dueTo" type="date" defaultValue={dueToValue} />
+        </label>
+        <label>
+          Tri
+          <select name="sort" defaultValue={selectedSort}>
+            {sortOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <div className="filter-actions">
+          <button className="button primary" type="submit">
+            Filtrer
+          </button>
+          <Link className="button" href="/reminders">
+            Reinitialiser
+          </Link>
+        </div>
+      </form>
+
       <div className="center-list">
         <article className="panel list-panel">
           <div className="section-title">
@@ -36,7 +143,7 @@ export default async function RemindersPage() {
             <span className="muted">{reminders.length} relance(s)</span>
           </div>
           {reminders.length === 0 ? (
-            <p className="muted">Aucune relance active pour le moment.</p>
+            <p className="muted">Aucune relance ne correspond aux filtres.</p>
           ) : (
             <ul className="record-list">
               {reminders.map((reminder) => (
@@ -44,7 +151,10 @@ export default async function RemindersPage() {
                   <div>
                     <strong>{reminder.title}</strong>
                     <p>
-                      {reminder.project.name} · {reminder.contact.name}
+                      <Link href={`/projects/${reminder.project.id}`}>
+                        {reminder.project.name}
+                      </Link>{" "}
+                      · {reminder.contact.name}
                     </p>
                     <span className="badge">
                       {getReminderStatusLabel(reminder.computedStatus)}

@@ -1,5 +1,6 @@
 import { ArchiveStatus } from "@/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
+import { resolveReminderStatus } from "@/modules/reminders/status";
 
 export async function listActiveProjects() {
   return prisma.project.findMany({
@@ -22,6 +23,43 @@ export async function listActiveProjects() {
       },
     },
   });
+}
+
+export async function getProjectWithReminders(id: string) {
+  const project = await prisma.project.findUnique({
+    where: { id },
+    include: {
+      reminders: {
+        where: {
+          status: {
+            not: "ARCHIVED",
+          },
+        },
+        include: {
+          contact: true,
+          template: true,
+        },
+        orderBy: [{ dueAt: "asc" }, { updatedAt: "desc" }],
+      },
+      _count: {
+        select: {
+          reminders: true,
+        },
+      },
+    },
+  });
+
+  if (!project) {
+    return null;
+  }
+
+  return {
+    ...project,
+    reminders: project.reminders.map((reminder) => ({
+      ...reminder,
+      computedStatus: resolveReminderStatus(reminder),
+    })),
+  };
 }
 
 export async function listActiveProjectsByLastInteraction() {
