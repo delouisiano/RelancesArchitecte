@@ -129,7 +129,7 @@ ARCHITECT_EMAIL="architecte@client.fr"
 SMTP_HOST="smtp.client.fr"
 SMTP_PORT="587"
 SMTP_USER="utilisateur-smtp"
-SMTP_PASSWORD="mot-de-passe-smtp"
+SMTP_PASSWORD_FILE="/home/openclaw/.config/relances-architecte/smtp-password"
 SMTP_FROM="Relances Architecte <no-reply@client.fr>"
 ```
 
@@ -139,6 +139,7 @@ Points de controle:
 - `AUTH_PASSWORD_HASH` doit etre le hash, pas le mot de passe en clair.
 - `AUTH_SECRET` doit etre long et aleatoire.
 - `SMTP_FROM` doit etre autorise par le fournisseur SMTP.
+- `SMTP_PASSWORD_FILE` permet de garder le mot de passe SMTP hors du `.env` et hors du depot Git.
 
 ## 5. Installer les dependances et preparer la base
 

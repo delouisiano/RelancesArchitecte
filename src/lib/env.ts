@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+
 function readRequired(name: string): string {
   const value = process.env[name];
 
@@ -6,6 +8,26 @@ function readRequired(name: string): string {
   }
 
   return value;
+}
+
+function readSecret(name: string): string {
+  const value = process.env[name];
+
+  if (value) {
+    return value;
+  }
+
+  const filePath = process.env[`${name}_FILE`];
+
+  if (filePath) {
+    const fileValue = readFileSync(filePath, "utf8").trim();
+
+    if (fileValue) {
+      return fileValue;
+    }
+  }
+
+  throw new Error(`Missing required environment variable: ${name}`);
 }
 
 export function getAuthConfig() {
@@ -23,6 +45,6 @@ export function getMailConfig() {
     host: readRequired("SMTP_HOST"),
     port: Number(readRequired("SMTP_PORT")),
     user: readRequired("SMTP_USER"),
-    password: readRequired("SMTP_PASSWORD"),
+    password: readSecret("SMTP_PASSWORD"),
   };
 }
