@@ -828,3 +828,42 @@ pre {
     width: 100%;
   }
 }
+
+.badge.status-ok {
+  border-color: rgba(35, 107, 90, 0.26);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.badge.status-warning {
+  border-color: rgba(164, 91, 19, 0.28);
+  background: #fff3df;
+  color: var(--warning);
+}
+
+.badge.status-error {
+  border-color: rgba(157, 47, 47, 0.28);
+  background: #fde8e8;
+  color: var(--danger);
+}
+
+.health-list {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.health-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.health-item p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  line-height: 1.5;
+}

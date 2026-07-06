@@ -1,7 +1,7 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { getActionSecret, getAppBaseUrl } from "@/lib/env";
 
-export const reminderEmailActions = ["close", "send"] as const;
+export const reminderEmailActions = ["close", "send", "postpone"] as const;
 export type ReminderEmailAction = (typeof reminderEmailActions)[number];
 
 type TokenPayload = {

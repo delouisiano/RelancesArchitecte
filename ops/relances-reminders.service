@@ -1,11 +1,17 @@
 [Unit]
-Description=Relances Architecte due reminder notification run
-After=network.target
+Description=Relances Architecte reminder notification run
+After=network-online.target
+Wants=network-online.target
 
 [Service]
 Type=oneshot
-User=openclaw
-Group=openclaw
-WorkingDirectory=/home/openclaw/RelancesArchitecte
-EnvironmentFile=/home/openclaw/RelancesArchitecte/.env
+User=relances
+Group=relances
+WorkingDirectory=/home/relances/RelancesArchitecte
+Environment=NODE_ENV=production
+EnvironmentFile=/home/relances/RelancesArchitecte/.env
 ExecStart=/usr/bin/npm run reminders:run
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ReadWritePaths=/home/relances/RelancesArchitecte

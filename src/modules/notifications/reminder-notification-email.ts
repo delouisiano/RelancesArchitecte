@@ -35,6 +35,7 @@ function row(label: string, value?: string | null) {
 export function buildReminderNotificationEmail({ reminder }: ReminderNotificationInput) {
   const closeUrl = createReminderActionUrl({ action: "close", reminderId: reminder.id });
   const sendUrl = createReminderActionUrl({ action: "send", reminderId: reminder.id });
+  const postponeUrl = createReminderActionUrl({ action: "postpone", reminderId: reminder.id });
   const dueAt = formatDate(reminder.dueAt);
   const contact = reminder.contact.email
     ? `${reminder.contact.name} <${reminder.contact.email}>`
@@ -49,6 +50,7 @@ export function buildReminderNotificationEmail({ reminder }: ReminderNotificatio
     reminder.note ? `Note: ${reminder.note}` : null,
     "",
     `Classer la relance: ${closeUrl}`,
+    `Reporter la relance: ${postponeUrl}`,
     `Envoyer la relance: ${sendUrl}`,
   ]
     .filter(Boolean)
@@ -72,6 +74,7 @@ export function buildReminderNotificationEmail({ reminder }: ReminderNotificatio
         </table>
         <div style="display:block;margin-top:22px;">
           <a href="${escapeHtml(closeUrl)}" style="display:inline-block;margin:0 10px 10px 0;padding:12px 16px;border-radius:6px;background:#edf0ea;color:#20211f;text-decoration:none;font-weight:700;">Classer la relance</a>
+          <a href="${escapeHtml(postponeUrl)}" style="display:inline-block;margin:0 10px 10px 0;padding:12px 16px;border-radius:6px;background:#fff3df;color:#7b3f08;text-decoration:none;font-weight:700;">Reporter</a>
           <a href="${escapeHtml(sendUrl)}" style="display:inline-block;margin:0 0 10px 0;padding:12px 16px;border-radius:6px;background:#236b5a;color:#ffffff;text-decoration:none;font-weight:700;">Envoyer la relance</a>
         </div>
         <p style="margin:18px 0 0;color:#687064;font-size:13px;line-height:1.5;">Ces liens sont signes et expirent automatiquement.</p>

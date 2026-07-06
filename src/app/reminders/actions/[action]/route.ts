@@ -2,8 +2,8 @@ import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 import { ReminderEventType, ReminderStatus } from "@/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
-import { sendReminderToContact } from "@/modules/reminders/send-reminder";
 import { verifyReminderActionToken } from "@/modules/reminders/email-actions";
+import { sendReminderToContact } from "@/modules/reminders/send-reminder";
 
 function escapeHtml(value: string) {
   return value
@@ -56,6 +56,48 @@ async function closeReminder(reminderId: string) {
   return { alreadyClosed: false };
 }
 
+async function postponeReminder(reminderId: string) {
+  const [reminder, settings] = await Promise.all([
+    prisma.reminder.findUnique({ where: { id: reminderId } }),
+    prisma.userSettings.findUnique({ where: { id: "default" } }),
+  ]);
+
+  if (!reminder) {
+    throw new Error("Relance introuvable.");
+  }
+
+  const finalStatuses = new Set<ReminderStatus>([
+    ReminderStatus.SENT,
+    ReminderStatus.CLOSED,
+    ReminderStatus.ARCHIVED,
+  ]);
+
+  if (finalStatuses.has(reminder.status)) {
+    throw new Error("Cette relance est deja finalisee.");
+  }
+
+  const days = settings?.defaultReminderDays ?? 7;
+  const dueAt = new Date();
+  dueAt.setDate(dueAt.getDate() + days);
+  dueAt.setHours(9, 0, 0, 0);
+
+  await prisma.reminder.update({
+    where: { id: reminderId },
+    data: {
+      dueAt,
+      status: ReminderStatus.POSTPONED,
+      events: {
+        create: {
+          type: ReminderEventType.POSTPONED,
+          message: `Relance reportee de ${days} jour(s) depuis le bouton email.`,
+        },
+      },
+    },
+  });
+
+  return { dueAt, days };
+}
+
 export async function GET(
   request: NextRequest,
   context: { params: Promise<{ action: string }> },
@@ -92,6 +134,17 @@ export async function GET(
         message: result.alreadyClosed
           ? "Aucune modification necessaire, cette relance etait deja classee."
           : "La relance a ete classee avec succes.",
+      });
+    }
+
+    if (action === "postpone") {
+      const result = await postponeReminder(payload.reminderId);
+      revalidatePath("/reminders");
+      revalidatePath(`/reminders/${payload.reminderId}`);
+
+      return renderResultPage({
+        title: "Relance reportee",
+        message: `La relance a ete reportee de ${result.days} jour(s), au ${result.dueAt.toLocaleDateString("fr-FR")}.`,
       });
     }
 

@@ -1,22 +1,15 @@
 [Unit]
-Description=Relances Architecte web application
-After=network-online.target
-Wants=network-online.target
+Description=Relances Architecte SQLite backup
 
 [Service]
-Type=simple
+Type=oneshot
 User=relances
 Group=relances
 WorkingDirectory=/home/relances/RelancesArchitecte
 Environment=NODE_ENV=production
 EnvironmentFile=/home/relances/RelancesArchitecte/.env
-ExecStart=/usr/bin/npm start
-Restart=on-failure
-RestartSec=5
+ExecStart=/usr/bin/npm run backup:db
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=full
 ReadWritePaths=/home/relances/RelancesArchitecte
-
-[Install]
-WantedBy=multi-user.target

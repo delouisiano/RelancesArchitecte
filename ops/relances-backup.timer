@@ -1,0 +1,11 @@
+[Unit]
+Description=Backup Relances Architecte SQLite database daily
+
+[Timer]
+OnCalendar=*-*-* 03:15:00
+AccuracySec=5min
+Persistent=true
+Unit=relances-backup.service
+
+[Install]
+WantedBy=timers.target

@@ -1,9 +1,10 @@
 [Unit]
-Description=Run Relances Architecte reminder notifications every 10 minutes
+Description=Run Relances Architecte reminders every 10 minutes
 
 [Timer]
 OnBootSec=2min
 OnUnitActiveSec=10min
+AccuracySec=30s
 Persistent=true
 Unit=relances-reminders.service
 

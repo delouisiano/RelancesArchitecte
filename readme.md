@@ -97,6 +97,7 @@ Le cooldown est stocke dans `UserSettings.notificationCooldown`, en heures.
 Les notifications envoyees a l'architecte sont des emails HTML avec resume de la relance et deux boutons :
 
 - `Classer la relance` : passe la relance en `CLOSED` ;
+- `Reporter` : reporte la relance du delai par defaut configure ;
 - `Envoyer la relance` : envoie le modele au contact, puis passe la relance en `SENT`.
 
 Les liens sont signes avec `ACTION_SECRET` dans `src/modules/reminders/email-actions.ts`. Ils expirent apres 7 jours.
@@ -141,6 +142,9 @@ npm run lint
 npm run build
 npm start
 npm run reminders:run
+npm run backup:db
+npm run health:check
+npm run db:clean-demo
 ```
 
 `npm test` est conserve comme commande neutre pour les pipelines, mais il n'y a plus de suite de tests automatisee active actuellement.
@@ -148,6 +152,8 @@ npm run reminders:run
 ## Base SQLite
 
 La base active est `dev.db` a la racine du projet.
+
+Le script `npm run backup:db` copie la base vers `backups/database` et applique une retention configurable avec `BACKUP_RETENTION_DAYS`.
 
 Avant operation risquee :
 
@@ -157,6 +163,10 @@ cp dev.db backups/dev.db.before-change-$(date -u +%Y%m%d-%H%M%S).sqlite
 ```
 
 Pour supprimer une relance manuellement, supprimer d'abord ses `NotificationLog` et `ReminderEvent`, puis la ligne `Reminder`.
+
+## Page sante
+
+La page `/health` et la commande `npm run health:check` verifient la base SQLite, les variables d'environnement, le secret SMTP, l'URL publique, les parametres agence, les relances dues et la derniere notification.
 
 ## Exploitation VPS
 

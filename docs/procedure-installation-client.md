@@ -65,7 +65,7 @@ Si le dossier n'existe pas encore:
 cd /home/openclaw
 git clone git@github.com:delouisiano/RelancesArchitecte.git
 cd RelancesArchitecte
-git checkout rebuild-single-version
+git checkout main
 ```
 
 Si le dossier existe deja:
@@ -73,8 +73,8 @@ Si le dossier existe deja:
 ```bash
 cd /home/openclaw/RelancesArchitecte
 git fetch origin
-git checkout rebuild-single-version
-git pull --ff-only
+git checkout main
+git pull --ff-only origin main
 ```
 
 Verifier l'etat Git:
@@ -84,7 +84,7 @@ git status -sb
 git log --oneline -5
 ```
 
-L'etat attendu est une branche propre, synchronisee avec `origin/rebuild-single-version`.
+L'etat attendu est une branche propre, synchronisee avec `origin/main`.
 
 ## 4. Creer le fichier d'environnement
 
@@ -124,6 +124,7 @@ APP_BASE_URL="https://relances.client.fr"
 AUTH_USERNAME="architecte"
 AUTH_PASSWORD_HASH="hash-sha256-du-mot-de-passe"
 AUTH_SECRET="secret-long-aleatoire"
+AUTH_SESSION_MAX_AGE_SECONDS="43200"
 
 ARCHITECT_EMAIL="architecte@client.fr"
 SMTP_HOST="smtp.client.fr"
@@ -165,7 +166,11 @@ Si l'installation doit partir avec des donnees de demonstration:
 npm run db:seed
 ```
 
-Si l'installation doit partir vide, ne pas lancer le seed.
+Si l'installation doit partir vide, ne pas lancer le seed. Si des donnees demo existent deja, les supprimer avec:
+
+```bash
+npm run db:clean-demo
+``` 
 
 Verifier que la base existe:
 
@@ -244,7 +249,36 @@ Verifier les logs:
 journalctl -u relances-reminders.service -n 80 --no-pager
 ```
 
-## 9. Configurer Nginx
+## 9. Installer le timer de sauvegarde
+
+Copier le service et le timer de backup:
+
+```bash
+sudo cp ops/relances-backup.service /etc/systemd/system/
+sudo cp ops/relances-backup.timer /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable --now relances-backup.timer
+```
+
+Tester une sauvegarde manuelle:
+
+```bash
+cd /home/relances/RelancesArchitecte
+set -a
+. ./.env
+set +a
+npm run backup:db
+```
+
+Verifier la sante applicative:
+
+```bash
+npm run health:check
+```
+
+La page `/health` donne le meme diagnostic dans l'application.
+
+## 10. Configurer Nginx
 
 Creer le fichier Nginx:
 
