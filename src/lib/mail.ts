@@ -5,6 +5,7 @@ export async function sendMail(input: {
   to: string;
   subject: string;
   text: string;
+  html?: string;
 }) {
   const config = getMailConfig();
   const transporter = nodemailer.createTransport({
@@ -22,5 +23,6 @@ export async function sendMail(input: {
     to: input.to,
     subject: input.subject,
     text: input.text,
+    html: input.html,
   });
 }

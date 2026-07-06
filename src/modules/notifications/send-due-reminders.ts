@@ -1,5 +1,6 @@
 import { ReminderEventType, ReminderStatus } from "@/generated/prisma/enums";
 import { sendMail } from "@/lib/mail";
+import { buildReminderNotificationEmail } from "@/modules/notifications/reminder-notification-email";
 import { prisma } from "@/lib/prisma";
 import { shouldNotifyReminder } from "@/modules/notifications/rules";
 import { resolveReminderStatus } from "@/modules/reminders/status";
@@ -49,17 +50,13 @@ export async function sendDueReminders(now = new Date()) {
     }
 
     try {
+      const email = buildReminderNotificationEmail({ reminder });
+
       await sendMail({
         to: settings.architectEmail,
-        subject: `Relance a traiter - ${reminder.title}`,
-        text: [
-          `Projet: ${reminder.project.name}`,
-          `Contact: ${reminder.contact.name}`,
-          `Echeance: ${reminder.dueAt.toISOString().slice(0, 10)}`,
-          reminder.note ? `Note: ${reminder.note}` : null,
-        ]
-          .filter(Boolean)
-          .join("\n"),
+        subject: email.subject,
+        text: email.text,
+        html: email.html,
       });
 
       await prisma.reminder.update({

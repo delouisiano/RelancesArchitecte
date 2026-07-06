@@ -48,3 +48,11 @@ export function getMailConfig() {
     password: readSecret("SMTP_PASSWORD"),
   };
 }
+
+export function getAppBaseUrl() {
+  return readRequired("APP_BASE_URL").replace(/\/$/, "");
+}
+
+export function getActionSecret() {
+  return process.env.ACTION_SECRET || process.env.AUTH_SECRET || readRequired("ACTION_SECRET");
+}
