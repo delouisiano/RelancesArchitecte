@@ -4,6 +4,10 @@ import { ReminderEventType, ReminderStatus } from "@/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
 import { verifyReminderActionToken } from "@/modules/reminders/email-actions";
 import { sendReminderToContact } from "@/modules/reminders/send-reminder";
+import {
+  assertReminderCanBeClosed,
+  assertReminderCanBePostponed,
+} from "@/modules/reminders/transitions";
 
 function escapeHtml(value: string) {
   return value
@@ -31,12 +35,10 @@ async function closeReminder(reminderId: string) {
     throw new Error("Relance introuvable.");
   }
 
-  if (reminder.status === ReminderStatus.CLOSED) {
-    return { alreadyClosed: true };
-  }
+  const transition = assertReminderCanBeClosed(reminder.status);
 
-  if (reminder.status === ReminderStatus.ARCHIVED) {
-    throw new Error("Cette relance est archivee.");
+  if (transition.alreadyClosed) {
+    return { alreadyClosed: true };
   }
 
   await prisma.reminder.update({
@@ -66,15 +68,7 @@ async function postponeReminder(reminderId: string) {
     throw new Error("Relance introuvable.");
   }
 
-  const finalStatuses = new Set<ReminderStatus>([
-    ReminderStatus.SENT,
-    ReminderStatus.CLOSED,
-    ReminderStatus.ARCHIVED,
-  ]);
-
-  if (finalStatuses.has(reminder.status)) {
-    throw new Error("Cette relance est deja finalisee.");
-  }
+  assertReminderCanBePostponed(reminder.status);
 
   const days = settings?.defaultReminderDays ?? 7;
   const dueAt = new Date();

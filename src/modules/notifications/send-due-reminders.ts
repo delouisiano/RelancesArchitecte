@@ -17,7 +17,12 @@ export async function sendDueReminders(now = new Date()) {
   const reminders = await prisma.reminder.findMany({
     where: {
       status: {
-        in: [ReminderStatus.UPCOMING, ReminderStatus.DUE, ReminderStatus.OVERDUE],
+        in: [
+          ReminderStatus.UPCOMING,
+          ReminderStatus.DUE,
+          ReminderStatus.OVERDUE,
+          ReminderStatus.POSTPONED,
+        ],
       },
     },
     include: {

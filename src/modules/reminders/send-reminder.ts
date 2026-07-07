@@ -1,7 +1,10 @@
 import { ReminderEventType, ReminderStatus } from "@/generated/prisma/enums";
 import { sendMail } from "@/lib/mail";
 import { prisma } from "@/lib/prisma";
+import { assertReminderCanBeSent } from "@/modules/reminders/transitions";
 import { renderTemplate } from "@/modules/templates/render";
+
+const pendingReminderSends = new Set<string>();
 
 function buildFallbackMessage(input: {
   title: string;
@@ -30,70 +33,78 @@ function buildFallbackMessage(input: {
 }
 
 export async function sendReminderToContact(reminderId: string) {
-  const [reminder, settings] = await Promise.all([
-    prisma.reminder.findUnique({
-      where: { id: reminderId },
-      include: { project: true, contact: true, template: true },
-    }),
-    prisma.userSettings.findUnique({ where: { id: "default" } }),
-  ]);
-
-  if (!reminder) {
-    throw new Error("Relance introuvable.");
+  if (pendingReminderSends.has(reminderId)) {
+    throw new Error("Un envoi est deja en cours pour cette relance.");
   }
 
-  if (!reminder.contact.email) {
-    throw new Error("Le contact de cette relance n'a pas d'email.");
-  }
+  pendingReminderSends.add(reminderId);
 
-  if (reminder.status === ReminderStatus.SENT && reminder.lastSentAt) {
-    return { reminder, alreadySent: true };
-  }
+  try {
+    const [reminder, settings] = await Promise.all([
+      prisma.reminder.findUnique({
+        where: { id: reminderId },
+        include: { project: true, contact: true, template: true },
+      }),
+      prisma.userSettings.findUnique({ where: { id: "default" } }),
+    ]);
 
-  if (reminder.status === ReminderStatus.CLOSED || reminder.status === ReminderStatus.ARCHIVED) {
-    throw new Error("Cette relance est deja classee ou archivee.");
-  }
+    if (!reminder) {
+      throw new Error("Relance introuvable.");
+    }
 
-  const renderedMail = reminder.template
-    ? renderTemplate({
-        subject: reminder.template.subject,
-        body: reminder.template.body,
-        projectName: reminder.project.name,
-        contactName: reminder.contact.name,
-        contactCompany: reminder.contact.company,
-        dueAt: reminder.dueAt,
-        note: reminder.note,
-        architectName: settings?.architectName,
-      })
-    : buildFallbackMessage({
-        title: reminder.title,
-        projectName: reminder.project.name,
-        contactName: reminder.contact.name,
-        note: reminder.note,
-        architectName: settings?.architectName,
-        agencyName: settings?.agencyName,
-      });
+    if (!reminder.contact.email) {
+      throw new Error("Le contact de cette relance n'a pas d'email.");
+    }
 
-  await sendMail({
-    to: reminder.contact.email,
-    subject: renderedMail.subject,
-    text: renderedMail.body,
-  });
+    const transition = assertReminderCanBeSent(reminder.status);
 
-  const updatedReminder = await prisma.reminder.update({
-    where: { id: reminder.id },
-    data: {
-      status: ReminderStatus.SENT,
-      lastSentAt: new Date(),
-      events: {
-        create: {
-          type: ReminderEventType.SENT,
-          message: `Relance envoyee a ${reminder.contact.email}.`,
+    if (transition.alreadySent) {
+      return { reminder, alreadySent: true };
+    }
+
+    const renderedMail = reminder.template
+      ? renderTemplate({
+          subject: reminder.template.subject,
+          body: reminder.template.body,
+          projectName: reminder.project.name,
+          contactName: reminder.contact.name,
+          contactCompany: reminder.contact.company,
+          dueAt: reminder.dueAt,
+          note: reminder.note,
+          architectName: settings?.architectName,
+        })
+      : buildFallbackMessage({
+          title: reminder.title,
+          projectName: reminder.project.name,
+          contactName: reminder.contact.name,
+          note: reminder.note,
+          architectName: settings?.architectName,
+          agencyName: settings?.agencyName,
+        });
+
+    await sendMail({
+      to: reminder.contact.email,
+      subject: renderedMail.subject,
+      text: renderedMail.body,
+    });
+
+    const updatedReminder = await prisma.reminder.update({
+      where: { id: reminder.id },
+      data: {
+        status: ReminderStatus.SENT,
+        lastSentAt: new Date(),
+        events: {
+          create: {
+            type: ReminderEventType.SENT,
+            message: `Relance envoyee a ${reminder.contact.email}.`,
+          },
         },
       },
-    },
-    include: { project: true, contact: true, template: true },
-  });
+      include: { project: true, contact: true, template: true },
+    });
 
-  return { reminder: updatedReminder, alreadySent: false };
+    return { reminder: updatedReminder, alreadySent: false };
+  } finally {
+    pendingReminderSends.delete(reminderId);
+  }
 }

@@ -1,11 +1,6 @@
 import { ReminderStatus } from "@/generated/prisma/enums";
 import { isBeforeDay, isSameDay } from "@/lib/date";
-
-const finalStatuses = new Set<ReminderStatus>([
-  ReminderStatus.SENT,
-  ReminderStatus.CLOSED,
-  ReminderStatus.ARCHIVED,
-]);
+import { isReminderFinalStatus } from "@/modules/reminders/transitions";
 
 export type ReminderStatusInput = {
   dueAt: Date;
@@ -13,14 +8,14 @@ export type ReminderStatusInput = {
 };
 
 export function isFinalReminderStatus(status: ReminderStatus): boolean {
-  return finalStatuses.has(status);
+  return isReminderFinalStatus(status);
 }
 
 export function resolveReminderStatus(
   reminder: ReminderStatusInput,
   now = new Date(),
 ): ReminderStatus {
-  if (isFinalReminderStatus(reminder.status)) {
+  if (isReminderFinalStatus(reminder.status)) {
     return reminder.status;
   }
 
@@ -30,6 +25,10 @@ export function resolveReminderStatus(
 
   if (isSameDay(reminder.dueAt, now)) {
     return ReminderStatus.DUE;
+  }
+
+  if (reminder.status === ReminderStatus.POSTPONED) {
+    return ReminderStatus.POSTPONED;
   }
 
   return ReminderStatus.UPCOMING;
