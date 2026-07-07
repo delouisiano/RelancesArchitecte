@@ -10,6 +10,10 @@ function readRequired(name: string): string {
   return value;
 }
 
+function hasSecret(name: string): boolean {
+  return Boolean(process.env[name] || process.env[`${name}_FILE`]);
+}
+
 function readSecret(name: string): string {
   const value = process.env[name];
 
@@ -33,8 +37,8 @@ function readSecret(name: string): string {
 export function getAuthConfig() {
   return {
     username: readRequired("AUTH_USERNAME"),
-    passwordHash: readRequired("AUTH_PASSWORD_HASH"),
-    secret: readRequired("AUTH_SECRET"),
+    passwordHash: readSecret("AUTH_PASSWORD_HASH"),
+    secret: readSecret("AUTH_SECRET"),
   };
 }
 
@@ -54,5 +58,9 @@ export function getAppBaseUrl() {
 }
 
 export function getActionSecret() {
-  return process.env.ACTION_SECRET || process.env.AUTH_SECRET || readRequired("ACTION_SECRET");
+  if (hasSecret("ACTION_SECRET")) {
+    return readSecret("ACTION_SECRET");
+  }
+
+  return readSecret("AUTH_SECRET");
 }

@@ -1,4 +1,5 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
+import { getAuthConfig } from "@/lib/env";
 
 export const sessionCookieName = "ra_session";
 export const defaultSessionMaxAgeSeconds = 12 * 60 * 60;
@@ -10,7 +11,7 @@ type SessionPayload = {
 };
 
 function getSecret(): string | null {
-  return process.env.AUTH_SECRET ?? null;
+  return getAuthConfig().secret;
 }
 
 export function getSessionMaxAgeSeconds(): number {

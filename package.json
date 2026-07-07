@@ -10,10 +10,10 @@
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx src/scripts/seed-demo-data.ts",
-    "reminders:run": "tsx src/scripts/send-due-reminders.ts",
+    "reminders:run": "./scripts/load-runtime-env.sh tsx src/scripts/send-due-reminders.ts",
     "test": "echo 'No automated tests configured'",
-    "backup:db": "tsx src/scripts/backup-database.ts",
-    "health:check": "tsx src/scripts/health-check.ts",
+    "backup:db": "./scripts/load-runtime-env.sh tsx src/scripts/backup-database.ts",
+    "health:check": "./scripts/load-runtime-env.sh tsx src/scripts/health-check.ts",
     "db:clean-demo": "tsx src/scripts/clean-demo-data.ts"
   },
   "dependencies": {

@@ -8,7 +8,7 @@ Group=relances
 WorkingDirectory=/home/relances/RelancesArchitecte
 Environment=NODE_ENV=production
 EnvironmentFile=/home/relances/RelancesArchitecte/.env
-ExecStart=/usr/bin/npm run backup:db
+ExecStart=/home/relances/RelancesArchitecte/scripts/load-runtime-env.sh /usr/bin/npm run backup:db
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=full

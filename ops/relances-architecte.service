@@ -10,7 +10,7 @@ Group=relances
 WorkingDirectory=/home/relances/RelancesArchitecte
 Environment=NODE_ENV=production
 EnvironmentFile=/home/relances/RelancesArchitecte/.env
-ExecStart=/usr/bin/npm start
+ExecStart=/home/relances/RelancesArchitecte/scripts/load-runtime-env.sh /usr/bin/npm start
 Restart=on-failure
 RestartSec=5
 NoNewPrivileges=true

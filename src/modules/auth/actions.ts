@@ -3,6 +3,7 @@
 import { createHash, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { getAuthConfig } from "@/lib/env";
 import { readRequiredText } from "@/lib/form";
 import {
   getSessionMaxAgeSeconds,
@@ -24,16 +25,11 @@ function safeEqual(left: string, right: string): boolean {
 export async function login(formData: FormData) {
   const username = readRequiredText(formData, "username");
   const password = readRequiredText(formData, "password");
-  const expectedUsername = process.env.AUTH_USERNAME;
-  const expectedPasswordHash = process.env.AUTH_PASSWORD_HASH;
-
-  if (!expectedUsername || !expectedPasswordHash) {
-    throw new Error("AUTH_USERNAME et AUTH_PASSWORD_HASH doivent etre configures.");
-  }
+  const authConfig = getAuthConfig();
 
   const passwordHash = hashPassword(password);
 
-  if (!safeEqual(username, expectedUsername) || !safeEqual(passwordHash, expectedPasswordHash)) {
+  if (!safeEqual(username, authConfig.username) || !safeEqual(passwordHash, authConfig.passwordHash)) {
     throw new Error("Identifiants invalides.");
   }
 

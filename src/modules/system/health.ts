@@ -11,7 +11,7 @@ export type HealthCheck = {
 };
 
 function envPresent(name: string) {
-  return Boolean(process.env[name]);
+  return Boolean(process.env[name] || process.env[`${name}_FILE`]);
 }
 
 function boolStatus(condition: boolean): HealthStatus {
@@ -48,7 +48,9 @@ export async function getSystemHealth() {
   checks.push({
     label: "Variables d'environnement",
     status: missingEnv.length === 0 ? "ok" : "error",
-    message: missingEnv.length === 0 ? "Configuration minimale presente." : `Manquantes: ${missingEnv.join(", ")}`,
+    message: missingEnv.length === 0
+      ? "Configuration minimale presente."
+      : `Manquantes: ${missingEnv.join(", ")}`,
   });
 
   checks.push({

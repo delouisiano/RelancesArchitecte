@@ -118,20 +118,26 @@ SMTP_USER="relances@atypik-interieur.com"
 SMTP_PASSWORD_FILE="/home/openclaw/.config/relances-architecte/smtp-password"
 SMTP_FROM="Atypik Interieur - Relances <relances@atypik-interieur.com>"
 
-ACTION_SECRET="secret-long-aleatoire"
+AUTH_USERNAME="delouisiano"
+AUTH_PASSWORD_HASH_FILE="/home/openclaw/.config/relances-architecte/auth-password-hash"
+AUTH_SECRET_FILE="/home/openclaw/.config/relances-architecte/auth-secret"
+ACTION_SECRET_FILE="/home/openclaw/.config/relances-architecte/action-secret"
 ```
 
-Le mot de passe SMTP est stocke hors depot dans :
+Les secrets sont stockes hors depot dans :
 
 ```text
 /home/openclaw/.config/relances-architecte/smtp-password
+/home/openclaw/.config/relances-architecte/auth-password-hash
+/home/openclaw/.config/relances-architecte/auth-secret
+/home/openclaw/.config/relances-architecte/action-secret
 ```
 
 Permissions recommandees :
 
 ```bash
 chmod 700 /home/openclaw/.config/relances-architecte
-chmod 600 /home/openclaw/.config/relances-architecte/smtp-password
+chmod 600 /home/openclaw/.config/relances-architecte/*
 chmod 600 /home/openclaw/RelancesArchitecte/.env
 ```
 
