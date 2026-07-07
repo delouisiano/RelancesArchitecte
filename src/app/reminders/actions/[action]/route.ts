@@ -23,7 +23,35 @@ function renderResultPage(input: { title: string; message: string; status?: numb
     `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${escapeHtml(input.title)}</title></head><body style="margin:0;background:#f5f6f3;color:#20211f;font-family:Arial,Helvetica,sans-serif;display:grid;min-height:100vh;place-items:center;padding:24px;"><main style="max-width:560px;background:#fff;border:1px solid #d8ddd2;border-radius:8px;padding:24px;"><p style="margin:0 0 8px;color:#687064;font-size:12px;text-transform:uppercase;letter-spacing:.08em;">Relances Atypik Interieur</p><h1 style="margin:0 0 12px;font-size:24px;">${escapeHtml(input.title)}</h1><p style="margin:0;line-height:1.6;color:#687064;">${escapeHtml(input.message)}</p></main></body></html>`,
     {
       status: input.status ?? 200,
-      headers: { "content-type": "text/html; charset=utf-8" },
+      headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" },
+    },
+  );
+}
+
+function getActionLabel(action: string) {
+  if (action === "close") {
+    return "Classer la relance";
+  }
+
+  if (action === "postpone") {
+    return "Reporter la relance";
+  }
+
+  if (action === "send") {
+    return "Envoyer la relance";
+  }
+
+  return "Executer l'action";
+}
+
+function renderConfirmationPage(input: { action: string; token: string }) {
+  const title = "Confirmer l'action";
+  const label = getActionLabel(input.action);
+
+  return new NextResponse(
+    `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${title}</title></head><body style="margin:0;background:#f5f6f3;color:#20211f;font-family:Arial,Helvetica,sans-serif;display:grid;min-height:100vh;place-items:center;padding:24px;"><main style="max-width:560px;background:#fff;border:1px solid #d8ddd2;border-radius:8px;padding:24px;"><p style="margin:0 0 8px;color:#687064;font-size:12px;text-transform:uppercase;letter-spacing:.08em;">Relances Atypik Interieur</p><h1 style="margin:0 0 12px;font-size:24px;">${title}</h1><p style="margin:0 0 18px;line-height:1.6;color:#687064;">Cette action modifiera la relance. Confirme seulement si tu veux l'executer maintenant.</p><form method="post"><input type="hidden" name="token" value="${escapeHtml(input.token)}"><button type="submit" style="border:0;border-radius:6px;background:#20211f;color:#fff;font-weight:700;padding:11px 14px;cursor:pointer;">${escapeHtml(label)}</button></form></main></body></html>`,
+    {
+      headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" },
     },
   );
 }
@@ -92,21 +120,7 @@ async function postponeReminder(reminderId: string) {
   return { dueAt, days };
 }
 
-export async function GET(
-  request: NextRequest,
-  context: { params: Promise<{ action: string }> },
-) {
-  const { action } = await context.params;
-  const token = request.nextUrl.searchParams.get("token");
-
-  if (!token) {
-    return renderResultPage({
-      title: "Lien invalide",
-      message: "Le lien d'action ne contient pas de jeton de securite.",
-      status: 400,
-    });
-  }
-
+async function executeReminderAction(action: string, token: string) {
   const payload = verifyReminderActionToken(token, action);
 
   if (!payload) {
@@ -167,4 +181,51 @@ export async function GET(
       status: 400,
     });
   }
+}
+
+export async function GET(
+  request: NextRequest,
+  context: { params: Promise<{ action: string }> },
+) {
+  const { action } = await context.params;
+  const token = request.nextUrl.searchParams.get("token");
+
+  if (!token) {
+    return renderResultPage({
+      title: "Lien invalide",
+      message: "Le lien d'action ne contient pas de jeton de securite.",
+      status: 400,
+    });
+  }
+
+  const payload = verifyReminderActionToken(token, action);
+
+  if (!payload) {
+    return renderResultPage({
+      title: "Lien invalide ou expire",
+      message: "Cette action ne peut pas etre executee. Ouvre la relance dans l'application si besoin.",
+      status: 400,
+    });
+  }
+
+  return renderConfirmationPage({ action, token });
+}
+
+export async function POST(
+  request: NextRequest,
+  context: { params: Promise<{ action: string }> },
+) {
+  const { action } = await context.params;
+  const formData = await request.formData();
+  const token = formData.get("token");
+
+  if (typeof token !== "string" || !token) {
+    return renderResultPage({
+      title: "Lien invalide",
+      message: "Le formulaire d'action ne contient pas de jeton de securite.",
+      status: 400,
+    });
+  }
+
+  return executeReminderAction(action, token);
 }
