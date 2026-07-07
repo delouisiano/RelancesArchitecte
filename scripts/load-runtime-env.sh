@@ -19,7 +19,7 @@ load_secret_file() {
       exit 1
     fi
 
-    export "$name=$(tr -d rn < "$file_path")"
+    export "$name=$(tr -d "\r\n" < "$file_path")"
   fi
 }
 

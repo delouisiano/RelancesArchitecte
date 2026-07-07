@@ -12,6 +12,8 @@ export async function sendMail(input: {
     host: config.host,
     port: config.port,
     secure: config.port === 465,
+    disableFileAccess: true,
+    disableUrlAccess: true,
     auth: {
       user: config.user,
       pass: config.password,
