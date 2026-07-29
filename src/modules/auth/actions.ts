@@ -14,6 +14,10 @@ import {
 const maxLoginFailures = 5;
 const loginWindowMs = 15 * 60 * 1000;
 
+export type LoginState = {
+  error?: string;
+};
+
 type LoginAttempt = {
   count: number;
   firstAttemptAt: number;
@@ -67,21 +71,25 @@ function getAttemptKey(username: string, clientAddress: string): string {
   return `${clientAddress}:${username.toLowerCase()}`;
 }
 
-function assertLoginAllowed(key: string): void {
+function assertLoginAllowed(key: string): LoginState | null {
   const now = Date.now();
   const attempt = loginAttempts.get(key);
 
   if (!attempt) {
-    return;
+    return null;
   }
 
   if (attempt.lockedUntil > now) {
-    throw new Error("Trop de tentatives. Réessayez dans quelques minutes.");
+    return {
+      error: "Trop de tentatives. Réessayez dans quelques minutes.",
+    };
   }
 
   if (now - attempt.firstAttemptAt > loginWindowMs) {
     loginAttempts.delete(key);
   }
+
+  return null;
 }
 
 function recordFailedLogin(key: string): void {
@@ -99,18 +107,23 @@ function recordFailedLogin(key: string): void {
   loginAttempts.set(key, nextAttempt);
 }
 
-export async function login(formData: FormData) {
+export async function login(_previousState: LoginState, formData: FormData): Promise<LoginState> {
   const username = readRequiredText(formData, "username");
   const password = readRequiredText(formData, "password");
   const authConfig = getAuthConfig();
   const headerStore = await headers();
   const attemptKey = getAttemptKey(username, getClientAddress(headerStore));
+  const blockedState = assertLoginAllowed(attemptKey);
 
-  assertLoginAllowed(attemptKey);
+  if (blockedState) {
+    return blockedState;
+  }
 
   if (!safeEqual(username, authConfig.username) || !verifyPassword(password, authConfig.passwordHash)) {
     recordFailedLogin(attemptKey);
-    throw new Error("Identifiants invalides.");
+    return {
+      error: "Mauvais identifiant ou mot de passe.",
+    };
   }
 
   loginAttempts.delete(attemptKey);

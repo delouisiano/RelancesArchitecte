@@ -1,4 +1,4 @@
-import { login } from "@/modules/auth/actions";
+import { LoginForm } from "@/app/login/login-form";
 
 export default function LoginPage() {
   return (
@@ -14,19 +14,7 @@ export default function LoginPage() {
         </div>
       </div>
 
-      <form action={login} className="panel form-panel narrow">
-        <label>
-          Identifiant
-          <input name="username" required />
-        </label>
-        <label>
-          Mot de passe
-          <input name="password" type="password" required />
-        </label>
-        <button className="button primary" type="submit">
-          Se connecter
-        </button>
-      </form>
+      <LoginForm />
     </section>
   );
 }
